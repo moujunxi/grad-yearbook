@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+  .page { width:210mm; height:297mm; display:flex; flex-direction:column; align-items:center; padding:40px 36px; page-break-after:always; position:relative; }
+  .overlay { position:absolute; inset:0; background:rgba(255,255,255,.15); }
+  .content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; width:100%; height:100%; }
+  .avatar { width:100px; height:100px; border-radius:50%; object-fit:cover; border:4px solid rgba(255,255,255,.7); margin-bottom:16px; }
+  .avatar-placeholder { width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,.4); display:flex; align-items:center; justify-content:center; font-size:48px; margin-bottom:16px; }
+  .name { font-size:32px; font-weight:bold; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.2); }
+  .label { margin-top:6px; padding:2px 16px; background:rgba(255,255,255,.3); border-radius:99px; font-size:14px; color:#fff; }
+  .motto { margin-top:12px; font-size:16px; color:rgba(255,255,255,.9); font-style:italic; }
+  .info { margin-top:24px; display:grid; grid-template-columns:1fr 1fr; gap:8px 40px; width:100%; max-width:480px; }
+  .info dt { font-size:12px; color:rgba(255,255,255,.65); }
+  .info dd { font-size:15px; color:#fff; margin-bottom:6px; }
+  .bio-box { margin-top:16px; width:100%; max-width:480px; background:rgba(255,255,255,.2); border-radius:12px; padding:16px; }
+  .bio-box h3 { font-size:14px; color:rgba(255,255,255,.7); margin-bottom:4px; }
+  .bio-box p { font-size:14px; color:#fff; line-height:1.6; }
+  .tags { margin-top:12px; display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
+  .tag { padding:2px 12px; background:rgba(255,255,255,.25); border-radius:99px; font-size:13px; color:#fff; }
+</style></head><body>
+<div class="page" style="{{THEME_BG}}">
+  <div class="overlay"></div>
+  <div class="content">
+    {{AVATAR}}
+    <h1 class="name">{{NAME}}</h1>
+    {{LABEL_HTML}}
+    {{MOTTO_HTML}}
+    <dl class="info">
+      {{INFO_ROWS}}
+    </dl>
+    {{BIO_HTML}}
+    {{TAGS_HTML}}
+  </div>
+</div>
+</body></html>

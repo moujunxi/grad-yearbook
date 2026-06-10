@@ -1,0 +1,20 @@
+{
+  "name": "6f-classmates",
+  "private": true,
+  "version": "1.0.0",
+  "description": "初中毕业同学录网站",
+  "scripts": {
+    "dev": "pnpm --parallel -r dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{js,jsx,json,css,md,sql}\""
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
