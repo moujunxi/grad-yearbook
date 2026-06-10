@@ -2,7 +2,7 @@ import themes from '../config/themes';
 
 export default function ThemeSelector({ value, onChange }) {
   return (
-    <div className="grid grid-cols-4 gap-3">
+    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3">
       {themes.map((t) => (
         <button key={t.key} type="button" onClick={() => onChange(t.key)}
           className={`flex flex-col items-center gap-1 p-1 rounded-lg transition
