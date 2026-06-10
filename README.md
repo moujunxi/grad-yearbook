@@ -107,8 +107,8 @@ npm install -g pnpm
 将项目推送到 Git 仓库，然后在服务器上克隆：
 
 ```bash
-git clone <your-repo-url> /opt/6f-classmates
-cd /opt/6f-classmates
+git clone https://github.com/<your-username>/grad-yearbook.git /opt/grad-yearbook
+cd /opt/grad-yearbook
 pnpm install
 ```
 
@@ -125,7 +125,7 @@ pnpm build
 进入 **网站** → **创建网站** → **静态网站**：
 
 - **域名**：填写你的域名或服务器 IP
-- **网站目录**：选择 `/opt/6f-classmates/client/dist`
+- **网站目录**：选择 `/opt/grad-yearbook/client/dist`
 - **代理设置**：添加以下两条反向代理
 
 | 路径 | 目标 |
@@ -139,7 +139,7 @@ pnpm build
 
 - **名称**：`6f-classmates-server`
 - **启动命令**：`node index.js`
-- **工作目录**：`/opt/6f-classmates/server`
+- **工作目录**：`/opt/grad-yearbook/server`
 - **进程数**：1
 
 启动后后端即运行在 `http://127.0.0.1:3000`。
@@ -155,7 +155,7 @@ pnpm build
 ### 更新部署
 
 ```bash
-cd /opt/6f-classmates
+cd /opt/grad-yearbook
 git pull
 pnpm install
 cd client && pnpm build
