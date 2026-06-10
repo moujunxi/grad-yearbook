@@ -18,8 +18,8 @@ importers:
   client:
     dependencies:
       '@hookform/resolvers':
-        specifier: ^5.4.0
-        version: 5.4.0(react-hook-form@7.78.0(react@18.3.0))
+        specifier: ^3.0.0
+        version: 3.0.0(react-hook-form@7.78.0(react@18.3.0))
       axios:
         specifier: ^1.17.0
         version: 1.17.0
@@ -42,8 +42,8 @@ importers:
         specifier: ^3.8.1
         version: 3.8.1(@types/react@18.3.31)(react-dom@18.3.0(react@18.3.0))(react-is@16.13.1)(react@18.3.0)(redux@5.0.1)
       zod:
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^3.24.1
+        version: 3.24.1
     devDependencies:
       '@types/react':
         specifier: ^18.3.0
@@ -78,6 +78,9 @@ importers:
 
   server:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.0.0
+        version: 3.0.0(react-hook-form@7.78.0(react@18.3.0))
       bcryptjs:
         specifier: ^3.0.3
         version: 3.0.3
@@ -105,6 +108,9 @@ importers:
       sql.js:
         specifier: ^1.10.0
         version: 1.14.1
+      zod:
+        specifier: ^3.24.1
+        version: 3.24.1
     devDependencies:
       eslint:
         specifier: ^8.57.0
@@ -361,10 +367,10 @@ packages:
   '@fast-csv/parse@4.3.1':
     resolution: {integrity: sha512-C73N77St4IHfVmT8Z2mWvLfvLyHWHyvGZVSG5mbhGefkmg9JztoaYpelf8ciqv99JzZ1ModpfuMWLwKEDTRL9A==}
 
-  '@hookform/resolvers@5.4.0':
-    resolution: {integrity: sha512-EIsqr/t/qbinPIhGjMdtvutIN1Kk4uwbROE9/UQ93CAVGR7GkA7Y92+fX80OzXi/OB67jVFYwKGO1WzkxmkFZw==}
+  '@hookform/resolvers@3.0.0':
+    resolution: {integrity: sha512-SQPefakODpyq25b/phHXDKCdRrEfPcCXV7B4nAa139wE1DxufYbbNAjeo0T04ZXBokRxZ+wD8iA1kkVMa3QwjQ==}
     peerDependencies:
-      react-hook-form: ^7.55.0
+      react-hook-form: ^7.0.0
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -2632,9 +2638,6 @@ packages:
   zod@3.24.1:
     resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
 
-  zod@4.4.3:
-    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
-
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
@@ -2860,9 +2863,8 @@ snapshots:
       lodash.isundefined: 3.0.1
       lodash.uniq: 4.5.0
 
-  '@hookform/resolvers@5.4.0(react-hook-form@7.78.0(react@18.3.0))':
+  '@hookform/resolvers@3.0.0(react-hook-form@7.78.0(react@18.3.0))':
     dependencies:
-      '@standard-schema/utils': 0.3.0
       react-hook-form: 7.78.0(react@18.3.0)
 
   '@humanwhocodes/config-array@0.11.14':
@@ -5396,5 +5398,3 @@ snapshots:
       readable-stream: 3.6.2
 
   zod@3.24.1: {}
-
-  zod@4.4.3: {}
