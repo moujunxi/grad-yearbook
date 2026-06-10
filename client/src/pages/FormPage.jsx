@@ -22,7 +22,9 @@ export default function FormPage() {
   const nav = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [serverError, setServerError] = useState('');
-  const [siteOpen, setSiteOpen] = useState(null); // null=loading
+  const [siteOpen, setSiteOpen] = useState(null);
+  const [otherTags, setOtherTags] = useState('');
+  const [customLabel, setCustomLabel] = useState('');
   const { register, handleSubmit, control, setValue, getValues, formState: { errors, isSubmitting } } =
     useForm({ resolver: zodResolver(entrySchema), defaultValues: { name: '', gender: '', class_name: '', wechat: '', qq: '', phone: '', email: '', bio: '', motto: '', future: '', favorite_tags: [], label: '', bg_theme: 'solid-indigo', custom_answers: {}, secret_message: '' } });
 
@@ -45,8 +47,9 @@ export default function FormPage() {
     fd.append('bio', data.bio);
     fd.append('motto', data.motto);
     fd.append('future', data.future);
-    fd.append('favorite_tags', JSON.stringify(data.favorite_tags));
-    fd.append('label', data.label);
+    const allTags = [...data.favorite_tags, ...otherTags.split(/[,，]/).map(s=>s.trim()).filter(Boolean)];
+    fd.append('favorite_tags', JSON.stringify(allTags));
+    fd.append('label', customLabel.trim() || data.label);
     fd.append('bg_theme', data.bg_theme);
     fd.append('custom_answers', JSON.stringify(data.custom_answers));
     fd.append('secret_message', data.secret_message);
@@ -132,10 +135,22 @@ export default function FormPage() {
             render={({ field }) => (
               <TagSelector mode="multi" options={favoriteTagOptions} selected={field.value} onChange={field.onChange} label="最喜欢的歌手/作品/电影/爱好" />
             )} />
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-gray-700">其他兴趣（逗号分隔）</p>
+            <input value={otherTags} onChange={e => setOtherTags(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none"
+              placeholder="如：滑雪、烘焙、撸猫..." />
+          </div>
           <Controller name="label" control={control}
             render={({ field }) => (
               <TagSelector mode="single" options={labelOptions} selected={field.value} onChange={field.onChange} label="给自己打个标签" />
             )} />
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-gray-700">或自定义标签</p>
+            <input value={customLabel} onChange={e => setCustomLabel(e.target.value)}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none"
+              placeholder="填了会覆盖上面选择的标签" />
+          </div>
         </section>
 
         {/* 背景主题 */}
@@ -154,9 +169,10 @@ export default function FormPage() {
                 <input
                   className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none"
                   placeholder="你的回答..."
+                  value={(getValues('custom_answers') || {})[typeof q === 'string' ? q : q.question || q] || ''}
                   onChange={(e) => {
                     const key = typeof q === 'string' ? q : (q.question || q);
-                    setValue('custom_answers', { ...getValues('custom_answers'), [key]: e.target.value });
+                    setValue('custom_answers', { ...(getValues('custom_answers')||{}), [key]: e.target.value });
                   }}
                 />
               </F>
