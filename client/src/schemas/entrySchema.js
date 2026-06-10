@@ -31,4 +31,5 @@ export const entrySchema = z.object({
   label: z.string().max(50).optional().default(''),
   bg_theme: z.string().optional().default('solid-indigo'),
   custom_answers: z.record(z.string(), z.string()).optional().default({}),
+  secret_message: z.string().max(1000).optional().default(''),
 });

@@ -24,7 +24,7 @@ export default function FormPage() {
   const [serverError, setServerError] = useState('');
   const [siteOpen, setSiteOpen] = useState(null); // null=loading
   const { register, handleSubmit, control, setValue, getValues, formState: { errors, isSubmitting } } =
-    useForm({ resolver: zodResolver(entrySchema), defaultValues: { name: '', gender: '', class_name: '', wechat: '', qq: '', phone: '', email: '', bio: '', motto: '', future: '', favorite_tags: [], label: '', bg_theme: 'solid-indigo', custom_answers: {} } });
+    useForm({ resolver: zodResolver(entrySchema), defaultValues: { name: '', gender: '', class_name: '', wechat: '', qq: '', phone: '', email: '', bio: '', motto: '', future: '', favorite_tags: [], label: '', bg_theme: 'solid-indigo', custom_answers: {}, secret_message: '' } });
 
   useEffect(() => {
     fetch('/api/config/site_open').then(r=>r.json()).then(d=>setSiteOpen(d.open)).catch(()=>setSiteOpen(true));
@@ -49,6 +49,7 @@ export default function FormPage() {
     fd.append('label', data.label);
     fd.append('bg_theme', data.bg_theme);
     fd.append('custom_answers', JSON.stringify(data.custom_answers));
+    fd.append('secret_message', data.secret_message);
     try {
       const entry = await submitEntry(fd);
       nav('/thank-you', { state: { entry } });
@@ -162,6 +163,16 @@ export default function FormPage() {
             ))}
           </section>
         )}
+
+        {/* 私密留言 */}
+        <section className="bg-white rounded-xl shadow-sm p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-gray-800">💌 给主人的悄悄话</h2>
+          <F label="私密留言（仅主人可见）">
+            <textarea {...register('secret_message')} rows={3}
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none"
+              placeholder="想说又不想被别人看到的话..." />
+          </F>
+        </section>
 
         {serverError && <p className="text-red-500 text-sm text-center bg-red-50 rounded-lg py-2">{serverError}</p>}
 

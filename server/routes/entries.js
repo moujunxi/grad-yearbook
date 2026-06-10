@@ -36,7 +36,8 @@ router.post('/', upload.single('avatar'), async (req, res) => {
     );
 
     const id = db.exec("SELECT last_insert_rowid()")[0].values[0][0];
-    db.run("INSERT INTO secret_messages (entry_id, content) VALUES (?, '')", [id]);
+    const secret = (b.secret_message || '').trim();
+    db.run("INSERT INTO secret_messages (entry_id, content) VALUES (?, ?)", [id, secret]);
     persist();
 
     res.status(201).json({
