@@ -107,7 +107,7 @@ npm install -g pnpm
 将项目推送到 Git 仓库，然后在服务器上克隆：
 
 ```bash
-git clone https://github.com/<your-username>/grad-yearbook.git /opt/grad-yearbook
+git clone https://github.com/moujunxi/grad-yearbook.git /opt/grad-yearbook
 cd /opt/grad-yearbook
 pnpm install
 ```
