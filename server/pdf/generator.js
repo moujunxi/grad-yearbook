@@ -39,8 +39,10 @@ function renderEntry(e) {
     ['手机', e.phone], ['邮箱', e.email], ['未来', e.future],
   ].filter(([,v]) => v);
   const infoRows = fields.map(([k,v]) => `<dt>${k}</dt><dd>${v||'-'}</dd>`).join('');
+  const isLight = (e.bg_theme || '').startsWith('pattern');
 
   let html = tpl
+    .replace('{{THEME_CLASS}}', isLight ? 'light' : '')
     .replace('{{THEME_BG}}', THEME_CSS[e.bg_theme] || THEME_CSS['solid-indigo'])
     .replace('{{AVATAR}}', avatarBase64(e))
     .replace('{{NAME}}', e.name || '')
@@ -50,7 +52,6 @@ function renderEntry(e) {
     .replace('{{BIO_HTML}}', e.bio ? `<div class="bio-box"><h3>个人介绍</h3><p>${e.bio}</p></div>` : '')
     .replace('{{TAGS_HTML}}', e.favorite_tags?.length ? `<div class="tags">${e.favorite_tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '');
 
-  // Strip unused placeholders
   html = html.replace(/\{\{[A-Z_]+\}\}/g, '');
   return html;
 }
