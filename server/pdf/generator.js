@@ -50,7 +50,10 @@ function renderEntry(e) {
     .replace('{{LABEL_HTML}}', e.label ? `<span class="label">${e.label}</span>` : '')
     .replace('{{MOTTO_HTML}}', e.motto ? `<p class="motto">"${e.motto}"</p>` : '')
     .replace('{{BIO_HTML}}', e.bio ? `<div class="bio-box"><h3>个人介绍</h3><p>${e.bio}</p></div>` : '')
-    .replace('{{TAGS_HTML}}', e.favorite_tags?.length ? `<div class="tags">${e.favorite_tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '');
+    .replace('{{TAGS_HTML}}', e.favorite_tags?.length ? `<div class="tags">${e.favorite_tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '')
+    .replace('{{QA_HTML}}', Object.keys(e.custom_answers||{}).length
+      ? `<div class="qa-box">${Object.entries(e.custom_answers).map(([q,a]) => `<div class="qa-item"><p class="q">${q}</p><p class="a">${a||'-'}</p></div>`).join('')}</div>`
+      : '');
 
   html = html.replace(/\{\{[A-Z_]+\}\}/g, '');
   return html;
@@ -100,7 +103,7 @@ export async function generatePdf() {
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
+  await page.setContent(html, { waitUntil: 'load', timeout: 60000 });
   const pdf = await page.pdf({ format: 'A4', printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
   await browser.close();
   return pdf;

@@ -32,6 +32,12 @@
   .page.light .bio-box h3 { color:#64748b; }
   .page.light .bio-box p { color:#334155; }
   .page.light .tag { background:rgba(0,0,0,.08); color:#475569; }
+  .qa-box { margin-top:16px; width:100%; max-width:480px; }
+  .qa-item { margin-bottom:8px; }
+  .qa-item .q { font-size:12px; color:rgba(255,255,255,.65); }
+  .qa-item .a { font-size:14px; color:#fff; }
+  .page.light .qa-item .q { color:#94a3b8; }
+  .page.light .qa-item .a { color:#334155; }
 </style></head><body>
 <div class="page {{THEME_CLASS}}" style="{{THEME_BG}}">
   <div class="overlay"></div>
@@ -45,6 +51,7 @@
     </dl>
     {{BIO_HTML}}
     {{TAGS_HTML}}
+    {{QA_HTML}}
   </div>
 </div>
 </body></html>
