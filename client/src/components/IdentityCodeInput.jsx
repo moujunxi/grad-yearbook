@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 
-export default function IdentityCodeInput({ value, onChange }) {
+export default function IdentityCodeInput({ value, onChange, onVerified }) {
   const [status, setStatus] = useState(null); // null | 'checking' | 'valid' | 'invalid' | 'error'
   const [modalMsg, setModalMsg] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
@@ -29,6 +29,7 @@ export default function IdentityCodeInput({ value, onChange }) {
       if (data.valid) {
         setStatus('valid');
         setModalMsg(data.blessing_message);
+        if (onVerified) onVerified(data.blessing_message);
       } else {
         setStatus('invalid');
         setErrorMsg('验证码无效，请检查后重试');

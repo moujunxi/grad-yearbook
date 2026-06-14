@@ -24,6 +24,7 @@ export default function FormPage() {
   const nav = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [serverError, setServerError] = useState('');
+  const [blessingMessage, setBlessingMessage] = useState('');
   const [siteOpen, setSiteOpen] = useState(null);
   const [otherTags, setOtherTags] = useState('');
   const [customLabel, setCustomLabel] = useState('');
@@ -59,7 +60,7 @@ export default function FormPage() {
     fd.append('identity_code', data.identity_code);
     try {
       const entry = await submitEntry(fd);
-      nav('/thank-you', { state: { entry } });
+      nav('/thank-you', { state: { entry, blessingMessage } });
     } catch (e) {
       setServerError(e.message);
     }
@@ -210,7 +211,7 @@ export default function FormPage() {
           <p className="text-xs text-gray-400">如果你有专属身份码，在这里输入后会显示专属祝福语</p>
           <Controller name="identity_code" control={control}
             render={({ field: { value, onChange } }) => (
-              <IdentityCodeInput value={value} onChange={onChange} />
+              <IdentityCodeInput value={value} onChange={onChange} onVerified={setBlessingMessage} />
             )} />
         </section>
 
