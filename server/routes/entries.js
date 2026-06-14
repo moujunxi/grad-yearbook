@@ -26,13 +26,16 @@ router.post('/', upload.single('avatar'), async (req, res) => {
     b.custom_answers = b.custom_answers ? JSON.parse(b.custom_answers) : {};
     const avatarPath = req.file ? `uploads/${req.file.filename}` : null;
 
+    const signatureData = (b.signature || '').trim();
+    const identityCode = (b.identity_code || '').trim();
+
     db.run(
-      `INSERT INTO entries (name,gender,class_name,avatar_path,wechat,qq,phone,email,bio,motto,future,favorite_tags,custom_answers,label,bg_theme)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `INSERT INTO entries (name,gender,class_name,avatar_path,wechat,qq,phone,email,bio,motto,future,favorite_tags,custom_answers,label,bg_theme,signature,identity_code)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [b.name||'', b.gender||'', b.class_name||'', avatarPath, b.wechat||'', b.qq||'', b.phone||'',
        b.email||'', b.bio||'', b.motto||'', b.future||'',
        JSON.stringify(b.favorite_tags), JSON.stringify(b.custom_answers),
-       b.label||'', b.bg_theme||'solid-indigo']
+       b.label||'', b.bg_theme||'solid-indigo', signatureData, identityCode]
     );
 
     const id = db.exec("SELECT last_insert_rowid()")[0].values[0][0];
@@ -46,6 +49,7 @@ router.post('/', upload.single('avatar'), async (req, res) => {
       email: b.email||'', bio: b.bio||'', motto: b.motto||'', future: b.future||'',
       favorite_tags: b.favorite_tags, custom_answers: b.custom_answers,
       label: b.label||'', bg_theme: b.bg_theme||'solid-indigo',
+      signature: signatureData, identity_code: identityCode,
       created_at: new Date().toISOString(),
     });
   } catch (e) {

@@ -22,6 +22,7 @@ export default function EntryDetailPage() {
             ['微信', entry.wechat], ['QQ', entry.qq], ['手机', entry.phone], ['邮箱', entry.email],
             ['介绍', entry.bio], ['座右铭', entry.motto], ['未来', entry.future],
             ['标签', entry.label], ['主题', entry.bg_theme],
+            ['签名', entry.signature ? '已签名 ✍️' : '无'], ['身份码', entry.identity_code || '-'],
             ['可见', entry.is_visible ? '是' : '否'], ['提交时间', entry.created_at],
           ].map(([l, v]) => (
             <div key={l} className="flex justify-between"><span className="text-gray-500">{l}</span><span className="font-medium text-gray-800 text-right">{v || '-'}</span></div>
@@ -29,6 +30,12 @@ export default function EntryDetailPage() {
           {entry.favorite_tags?.length > 0 && (
             <div className="flex justify-between"><span className="text-gray-500">兴趣标签</span>
               <span className="font-medium text-gray-800 text-right">{entry.favorite_tags.join(', ')}</span></div>
+          )}
+          {entry.signature && (
+            <div className="mt-4 text-center border-t pt-4">
+              <p className="text-sm text-gray-500 mb-2">✍️ 手写签名</p>
+              <img src={entry.signature} alt="签名" className="max-w-[200px] max-h-[80px] mx-auto border rounded" />
+            </div>
           )}
         </div>
         <div><EntryCard entry={entry} /></div>

@@ -53,6 +53,9 @@ function renderEntry(e) {
     .replace('{{TAGS_HTML}}', e.favorite_tags?.length ? `<div class="tags">${e.favorite_tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '')
     .replace('{{QA_HTML}}', Object.keys(e.custom_answers||{}).length
       ? `<div class="qa-box">${Object.entries(e.custom_answers).map(([q,a]) => `<div class="qa-item"><p class="q">${q}</p><p class="a">${a||'-'}</p></div>`).join('')}</div>`
+      : '')
+    .replace('{{SIGNATURE_HTML}}', e.signature
+      ? `<div class="signature-box"><p class="sig-label">✍️ 手写签名</p><img src="${e.signature}" class="sig-img" alt="签名" /></div>`
       : '');
 
   html = html.replace(/\{\{[A-Z_]+\}\}/g, '');
@@ -66,7 +69,8 @@ export async function generatePdf() {
     id: r[0], name: r[1], gender: r[2], class_name: r[3], avatar_path: r[4],
     wechat: r[5], qq: r[6], phone: r[7], email: r[8], bio: r[9], motto: r[10],
     future: r[11], favorite_tags: JSON.parse(r[12]||'[]'), custom_answers: JSON.parse(r[13]||'{}'),
-    label: r[14], bg_theme: r[15], is_visible: r[16], created_at: r[17],
+    label: r[14], bg_theme: r[15], signature: r[16], identity_code: r[17],
+    is_visible: r[18], created_at: r[19],
   }));
 
   // Cover

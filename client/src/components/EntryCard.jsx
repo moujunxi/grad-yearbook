@@ -20,6 +20,9 @@ export default function EntryCard({ entry }) {
         )}
         {entry.motto && <p className="mt-3 text-white/90 italic text-center">"{entry.motto}"</p>}
         {entry.class_name && <p className="mt-2 text-white/70 text-sm">{entry.class_name}</p>}
+        {entry.signature && (
+          <img src={entry.signature} alt="签名" className="mt-3 max-w-[120px] max-h-[40px] opacity-80" />
+        )}
       </div>
     </div>
   );

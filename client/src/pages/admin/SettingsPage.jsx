@@ -6,11 +6,22 @@ export default function SettingsPage() {
   const [q, setQ] = useState([]);
   const [qrUrl, setQrUrl] = useState('');
   const qrImgRef = useRef(null);
+  const [identityCodes, setIdentityCodes] = useState([]);
+  const [newCode, setNewCode] = useState('');
+  const [newBlessing, setNewBlessing] = useState('');
+  const [editId, setEditId] = useState(null);
+  const [editCode, setEditCode] = useState('');
+  const [editBlessing, setEditBlessing] = useState('');
+  const [icError, setIcError] = useState('');
 
   useEffect(() => { api.get('/admin/config').then(r => {
     setCfg(r.data);
     try { setQ(JSON.parse(r.data.custom_questions || '[]')); } catch { setQ([]); }
-  }).catch(() => {}); }, []);
+  }).catch(() => {}); fetchIdentityCodes(); }, []);
+
+  const fetchIdentityCodes = () => {
+    api.get('/admin/identity-codes').then(r => setIdentityCodes(r.data)).catch(() => {});
+  };
 
   const save = async (k, v) => {
     await api.put('/admin/config', { [k]: String(v) });
@@ -38,6 +49,30 @@ export default function SettingsPage() {
       const a = document.createElement('a'); a.href = url; a.download = '同学录.pdf'; a.click();
       URL.revokeObjectURL(url);
     } finally { setPdfLoading(false); }
+  };
+
+  // --- 身份验证码 CRUD ---
+  const addIdentityCode = async () => {
+    if (!newCode.trim() || !newBlessing.trim()) return;
+    setIcError('');
+    try {
+      await api.post('/admin/identity-codes', { code: newCode.trim(), blessing_message: newBlessing.trim() });
+      setNewCode(''); setNewBlessing('');
+      fetchIdentityCodes();
+    } catch (e) { setIcError(e.response?.data?.error || e.message); }
+  };
+  const startEdit = (ic) => { setEditId(ic.id); setEditCode(ic.code); setEditBlessing(ic.blessing_message); };
+  const cancelEdit = () => { setEditId(null); setEditCode(''); setEditBlessing(''); setIcError(''); };
+  const saveEdit = async (id) => {
+    setIcError('');
+    try {
+      await api.put(`/admin/identity-codes/${id}`, { code: editCode.trim(), blessing_message: editBlessing.trim() });
+      cancelEdit(); fetchIdentityCodes();
+    } catch (e) { setIcError(e.response?.data?.error || e.message); }
+  };
+  const deleteIdentityCode = async (id) => {
+    if (!confirm('确定删除此验证码？')) return;
+    await api.delete(`/admin/identity-codes/${id}`); fetchIdentityCodes();
   };
 
   return (
@@ -71,6 +106,56 @@ export default function SettingsPage() {
           className="text-indigo-600 hover:underline text-sm">+ 添加问题</button>
         <button type="button" onClick={saveQuestions}
           className="block px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">保存题目</button>
+      </section>
+
+      {/* 身份验证码管理 */}
+      <section className="bg-white rounded-xl shadow-sm p-6 space-y-3">
+        <h2 className="text-lg font-semibold">🔑 身份验证码管理</h2>
+        <p className="text-xs text-gray-400">每个身份码绑定一条祝福语，同学输入匹配的验证码后可看到专属祝福</p>
+        {icError && <p className="text-red-500 text-xs">{icError}</p>}
+        {/* 已有列表 */}
+        {identityCodes.length > 0 && (
+          <ul className="space-y-2">
+            {identityCodes.map(ic => (
+              <li key={ic.id} className="border rounded-lg p-3 text-sm">
+                {editId === ic.id ? (
+                  <div className="space-y-2">
+                    <input value={editCode} onChange={e => setEditCode(e.target.value)}
+                      className="w-full border rounded px-2 py-1 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none" placeholder="验证码" />
+                    <textarea value={editBlessing} onChange={e => setEditBlessing(e.target.value)} rows={2}
+                      className="w-full border rounded px-2 py-1 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none" placeholder="祝福语" />
+                    <div className="flex gap-2">
+                      <button onClick={() => saveEdit(ic.id)} className="text-indigo-600 hover:underline text-xs">保存</button>
+                      <button onClick={cancelEdit} className="text-gray-500 hover:underline text-xs">取消</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-800 truncate">{ic.code}</p>
+                      <p className="text-gray-500 text-xs truncate mt-0.5">{ic.blessing_message}</p>
+                    </div>
+                    <div className="flex gap-2 shrink-0">
+                      <button onClick={() => startEdit(ic)} className="text-indigo-600 hover:underline text-xs">编辑</button>
+                      <button onClick={() => deleteIdentityCode(ic.id)} className="text-red-500 hover:underline text-xs">删除</button>
+                    </div>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+        {/* 添加表单 */}
+        <div className="space-y-2 pt-2 border-t">
+          <input value={newCode} onChange={e => setNewCode(e.target.value)}
+            className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none"
+            placeholder="验证码（如：SECRET2026）" />
+          <textarea value={newBlessing} onChange={e => setNewBlessing(e.target.value)} rows={2}
+            className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none"
+            placeholder="祝福语（如：祝你前程似锦，未来可期！）" />
+          <button onClick={addIdentityCode}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">添加身份码</button>
+        </div>
       </section>
 
       {/* 二维码 */}

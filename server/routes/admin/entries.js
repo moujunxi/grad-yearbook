@@ -7,7 +7,8 @@ function rowToEntry(r) {
   return { id: r[0], name: r[1], gender: r[2], class_name: r[3], avatar_path: r[4],
     wechat: r[5], qq: r[6], phone: r[7], email: r[8], bio: r[9], motto: r[10],
     future: r[11], favorite_tags: JSON.parse(r[12]||'[]'), custom_answers: JSON.parse(r[13]||'{}'),
-    label: r[14], bg_theme: r[15], is_visible: r[16], created_at: r[17] };
+    label: r[14], bg_theme: r[15], signature: r[16], identity_code: r[17],
+    is_visible: r[18], created_at: r[19] };
 }
 
 // 列表（分页+搜索）
@@ -66,11 +67,11 @@ router.put('/:id', async (req, res) => {
     if (b.favorite_tags) vals.splice(6, 0, JSON.stringify(b.favorite_tags));
     // Actually just keep it simple
     db.run(`UPDATE entries SET name=?,gender=?,class_name=?,wechat=?,qq=?,phone=?,email=?,bio=?,
-      motto=?,future=?,favorite_tags=?,custom_answers=?,label=?,bg_theme=? WHERE id=?`,
+      motto=?,future=?,favorite_tags=?,custom_answers=?,label=?,bg_theme=?,signature=?,identity_code=? WHERE id=?`,
       [b.name||'', b.gender||'', b.class_name||'', b.wechat||'', b.qq||'', b.phone||'',
        b.email||'', b.bio||'', b.motto||'', b.future||'',
        JSON.stringify(b.favorite_tags||[]), JSON.stringify(b.custom_answers||{}),
-       b.label||'', b.bg_theme||'solid-indigo', +req.params.id]);
+       b.label||'', b.bg_theme||'solid-indigo', (b.signature||''), (b.identity_code||''), +req.params.id]);
     persist();
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }

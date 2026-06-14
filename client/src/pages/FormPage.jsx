@@ -8,6 +8,8 @@ import { fetchQuestions, submitEntry } from '../lib/api';
 import AvatarUpload from '../components/AvatarUpload';
 import ThemeSelector from '../components/ThemeSelector';
 import TagSelector from '../components/TagSelector';
+import SignaturePad from '../components/SignaturePad';
+import IdentityCodeInput from '../components/IdentityCodeInput';
 
 const F = ({ children, label, required }) => (
   <div className="space-y-1">
@@ -26,7 +28,7 @@ export default function FormPage() {
   const [otherTags, setOtherTags] = useState('');
   const [customLabel, setCustomLabel] = useState('');
   const { register, handleSubmit, control, setValue, getValues, formState: { errors, isSubmitting } } =
-    useForm({ resolver: zodResolver(entrySchema), defaultValues: { name: '', gender: '', class_name: '', wechat: '', qq: '', phone: '', email: '', bio: '', motto: '', future: '', favorite_tags: [], label: '', bg_theme: 'solid-indigo', custom_answers: {}, secret_message: '' } });
+    useForm({ resolver: zodResolver(entrySchema), defaultValues: { name: '', gender: '', class_name: '', wechat: '', qq: '', phone: '', email: '', bio: '', motto: '', future: '', favorite_tags: [], label: '', bg_theme: 'solid-indigo', custom_answers: {}, secret_message: '', signature: '', identity_code: '' } });
 
   useEffect(() => {
     fetch('/api/config/site_open').then(r=>r.json()).then(d=>setSiteOpen(d.open)).catch(()=>setSiteOpen(true));
@@ -53,6 +55,8 @@ export default function FormPage() {
     fd.append('bg_theme', data.bg_theme);
     fd.append('custom_answers', JSON.stringify(data.custom_answers));
     fd.append('secret_message', data.secret_message);
+    fd.append('signature', data.signature);
+    fd.append('identity_code', data.identity_code);
     try {
       const entry = await submitEntry(fd);
       nav('/thank-you', { state: { entry } });
@@ -188,6 +192,26 @@ export default function FormPage() {
               className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none"
               placeholder="想说又不想被别人看到的话..." />
           </F>
+        </section>
+
+        {/* 手写签名 */}
+        <section className="bg-white rounded-xl shadow-sm p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-gray-800">✍️ 个性签名</h2>
+          <p className="text-xs text-gray-400">可在下方签名区手写或绘制你的签名（可选）</p>
+          <Controller name="signature" control={control}
+            render={({ field: { value, onChange } }) => (
+              <SignaturePad value={value} onChange={onChange} />
+            )} />
+        </section>
+
+        {/* 身份验证码 */}
+        <section className="bg-white rounded-xl shadow-sm p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-gray-800">🔑 身份验证码</h2>
+          <p className="text-xs text-gray-400">如果你有专属身份码，在这里输入后会显示专属祝福语</p>
+          <Controller name="identity_code" control={control}
+            render={({ field: { value, onChange } }) => (
+              <IdentityCodeInput value={value} onChange={onChange} />
+            )} />
         </section>
 
         {serverError && <p className="text-red-500 text-sm text-center bg-red-50 rounded-lg py-2">{serverError}</p>}

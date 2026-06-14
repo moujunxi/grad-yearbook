@@ -32,4 +32,6 @@ export const entrySchema = z.object({
   bg_theme: z.string().optional().default('solid-indigo'),
   custom_answers: z.record(z.string(), z.string()).optional().default({}),
   secret_message: z.string().max(1000).optional().default(''),
+  signature: z.string().optional().default(''),
+  identity_code: z.string().max(50).optional().default(''),
 });

@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS entries (
   custom_answers TEXT,
   label TEXT,
   bg_theme TEXT,
+  signature TEXT,
+  identity_code TEXT,
   is_visible INTEGER DEFAULT 1,
   created_at TEXT DEFAULT (datetime('now','localtime'))
 );
@@ -34,6 +36,13 @@ CREATE TABLE IF NOT EXISTS admin (
 CREATE TABLE IF NOT EXISTS site_config (
   key TEXT PRIMARY KEY,
   value TEXT
+);
+
+CREATE TABLE IF NOT EXISTS identity_codes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  code TEXT UNIQUE NOT NULL,
+  blessing_message TEXT NOT NULL,
+  created_at TEXT DEFAULT (datetime('now','localtime'))
 );
 
 -- 预置默认站点配置

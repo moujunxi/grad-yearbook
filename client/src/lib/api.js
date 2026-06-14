@@ -14,3 +14,9 @@ export async function submitEntry(formData) {
   }
   return res.json();
 }
+
+export async function lookupIdentityCode(code) {
+  const res = await fetch(`${BASE}/identity/lookup?code=${encodeURIComponent(code)}`);
+  if (!res.ok) return { valid: false };
+  return res.json();
+}

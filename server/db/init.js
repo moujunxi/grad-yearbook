@@ -36,6 +36,18 @@ export async function getDb() {
     const schema = readFileSync(join(__dirname, 'schema.sql'), 'utf-8');
     db.exec(schema);
 
+    // 兼容迁移：为已有的 entries 表补充新列
+    try {
+      const cols = db.exec("PRAGMA table_info(entries)")[0].values;
+      const colNames = cols.map(c => c[1]);
+      if (!colNames.includes('signature')) {
+        db.run("ALTER TABLE entries ADD COLUMN signature TEXT");
+      }
+      if (!colNames.includes('identity_code')) {
+        db.run("ALTER TABLE entries ADD COLUMN identity_code TEXT");
+      }
+    } catch (_) { /* entries 表可能还不存在 */ }
+
     // 首次启动 seed 默认管理员
     const count = db.exec('SELECT COUNT(*) FROM admin')[0].values[0][0];
     if (count === 0) {

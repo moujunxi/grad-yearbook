@@ -14,6 +14,8 @@ import adminQrcode from './routes/admin/qrcode.js';
 import adminExport from './routes/admin/export.js';
 import adminPdf from './routes/admin/pdf.js';
 import adminConfig from './routes/admin/config.js';
+import identityRouter from './routes/identity.js';
+import adminIdentityCodes from './routes/admin/identity_codes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,6 +31,7 @@ app.use('/uploads', express.static(join(__dirname, 'uploads')));
 app.use('/api/health', healthRouter);
 app.use('/api/config', configRouter);
 app.use('/api/entries', entriesRouter);
+app.use('/api/identity', identityRouter);
 app.use('/api/admin', authRouter);
 
 // 管理员鉴权
@@ -39,6 +42,7 @@ app.use('/api/admin/qrcode', adminQrcode);
 app.use('/api/admin/export/pdf', adminPdf);
 app.use('/api/admin/export', adminExport);
 app.use('/api/admin/config', adminConfig);
+app.use('/api/admin/identity-codes', adminIdentityCodes);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
