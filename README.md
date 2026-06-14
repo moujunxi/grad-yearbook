@@ -22,7 +22,7 @@
 │   └── src/
 │       ├── pages/           # FormPage, ThankYouPage
 │       │   └── admin/       # 管理后台页面
-│       ├── components/      # AvatarUpload, ThemeSelector, TagSelector, EntryCard
+│       ├── components/      # AvatarUpload, ThemeSelector, TagSelector, EntryCard, SignaturePad, IdentityCodeInput
 │       ├── config/          # themes.js（12款）, tags.js
 │       ├── schemas/         # Zod 表单校验
 │       └── utils/           # Axios 实例 + JWT 拦截器
@@ -44,6 +44,8 @@
 - 选择背景主题（12款：4纯色 + 4渐变 + 4花纹）
 - 兴趣标签多选 + 个性标签单选
 - 自定义问答（管理员后台配置题目）
+- 手写签名（Canvas 绘制，可选）
+- 身份验证码（匹配后弹窗显示专属祝福语，可选）
 - 提交后预览卡片
 
 **管理后台**
@@ -51,14 +53,16 @@
 - 统计概览 + 每日提交趋势折线图
 - 条目管理：查看、编辑、隐藏/显示、删除
 - 查看私密留言
+- 手写签名查看（详情页展示签名图）
+- 身份验证码管理（添加/编辑/删除，每个码绑定一条祝福语）
 - 网站开关（关闭后前端显示"已截止"）
 - 自定义问答题目配置
 - 填写入口二维码生成与下载
 - 数据导出：JSON（含私密留言）、Excel、PDF
 
 **PDF 同学录**
-- 封面页 + 目录页 + 每位同学独立一页（含背景主题）+ 私密留言汇总
-- 头像以 base64 内嵌，无破图
+- 封面页 + 目录页 + 每位同学独立一页（含背景主题、手写签名）+ 私密留言汇总
+- 头像、签名以 base64 内嵌，无破图
 - 一键下载
 
 ## 快速开始
