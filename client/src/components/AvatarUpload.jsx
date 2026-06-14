@@ -25,7 +25,7 @@ export default function AvatarUpload({ value, onChange, error }) {
         <div className="relative w-24 h-24 mx-auto">
           <img src={preview} className="w-24 h-24 rounded-full object-cover border-2 border-indigo-300" />
           <button type="button" onClick={() => onChange(null)}
-            className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs leading-none">✕</button>
+            className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-8 h-8 text-sm leading-none flex items-center justify-center">✕</button>
         </div>
       ) : (
         <button type="button" onClick={() => inputRef.current?.click()}

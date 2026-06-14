@@ -75,8 +75,8 @@ export default function SignaturePad({ value, onChange }) {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="relative border-2 border-dashed border-gray-300 rounded-lg bg-white overflow-hidden"
-        style={{ width: 320, height: 120, touchAction: 'none' }}>
+      <div className="relative border-2 border-dashed border-gray-300 rounded-lg bg-white overflow-hidden w-full max-w-[320px]"
+        style={{ height: 120, touchAction: 'none' }}>
         <canvas
           ref={canvasRef}
           width={640}

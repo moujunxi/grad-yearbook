@@ -88,7 +88,7 @@ export default function FormPage() {
             <input {...register('name')} className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none" placeholder="你的名字" />
             {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
           </F>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <F label="性别">
               <select {...register('gender')} className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none">
                 <option value="">请选择</option><option value="男">男</option><option value="女">女</option>
@@ -112,11 +112,11 @@ export default function FormPage() {
         {/* 联系方式 */}
         <section className="bg-white rounded-xl shadow-sm p-6 space-y-4">
           <h2 className="text-lg font-semibold text-gray-800">联系方式</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <F label="微信"><input {...register('wechat')} className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none" placeholder="微信号" /></F>
             <F label="QQ"><input {...register('qq')} className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none" placeholder="QQ号" /></F>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <F label="手机"><input {...register('phone')} className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none" placeholder="手机号" /></F>
             <F label="邮箱"><input {...register('email')} className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none" placeholder="email@example.com" />
               {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
