@@ -29,12 +29,25 @@ export default function SignaturePad({ value, onChange }) {
     padRef.current = pad;
   }, [onChange]);
 
-  // Init pad on mount (only if no pre-existing signature to display)
-  // Using empty deps so the pad stays alive across multiple strokes
+  // Resize canvas to match CSS display size, then init pad.
+  // This fixes the coordinate offset: signature_pad uses CSS-relative
+  // coordinates directly on the canvas context, so canvas.width/height
+  // must equal the displayed pixel size.
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    // Only resize if dimensions differ (avoid unnecessary clear on re-render)
+    if (canvas.width !== Math.round(rect.width) || canvas.height !== Math.round(rect.height)) {
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+
     if (!value) {
       initPad();
     }
+
     return () => {
       if (padRef.current) padRef.current.off();
     };
@@ -64,7 +77,6 @@ export default function SignaturePad({ value, onChange }) {
   };
 
   const startRedraw = () => {
-    // Clear canvas and switch to draw mode
     if (padRef.current) padRef.current.off();
     padRef.current = null;
     const canvas = canvasRef.current;
@@ -73,7 +85,6 @@ export default function SignaturePad({ value, onChange }) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     onChange(null);
-    // Re-init pad on next render
     setTimeout(initPad, 0);
   };
 
@@ -83,8 +94,6 @@ export default function SignaturePad({ value, onChange }) {
         style={{ height: 120, touchAction: 'none' }}>
         <canvas
           ref={canvasRef}
-          width={640}
-          height={240}
           className="w-full h-full block"
           style={{ touchAction: 'none' }}
         />
