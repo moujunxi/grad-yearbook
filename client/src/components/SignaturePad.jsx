@@ -29,18 +29,21 @@ export default function SignaturePad({ value, onChange }) {
     padRef.current = pad;
   }, [onChange]);
 
+  // Init pad on mount (only if no pre-existing signature to display)
+  // Using empty deps so the pad stays alive across multiple strokes
   useEffect(() => {
-    if (!hasValue) {
+    if (!value) {
       initPad();
     }
     return () => {
       if (padRef.current) padRef.current.off();
     };
-  }, [hasValue, initPad]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Load existing signature image onto canvas
+  // Load existing signature image for display only (not during active drawing)
   useEffect(() => {
-    if (hasValue && canvasRef.current) {
+    if (value && canvasRef.current && !padRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
       const img = new Image();
@@ -50,7 +53,8 @@ export default function SignaturePad({ value, onChange }) {
       };
       img.src = value;
     }
-  }, [hasValue, value]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const clear = () => {
     if (padRef.current) {
@@ -95,7 +99,7 @@ export default function SignaturePad({ value, onChange }) {
           <>
             <button type="button" onClick={startRedraw}
               className="text-xs text-indigo-600 hover:underline">重新绘制</button>
-            <button type="button" onClick={() => onChange(null)}
+            <button type="button" onClick={() => { if (padRef.current) { padRef.current.clear(); } onChange(null); }}
               className="text-xs text-red-500 hover:underline">清除</button>
           </>
         ) : (
