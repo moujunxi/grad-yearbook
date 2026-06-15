@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
-  .page { width:210mm; height:297mm; padding:40px 60px; page-break-after:always; }
-  h1 { font-size:32px; margin-bottom:32px; text-align:center; color:#333; }
-  table { width:100%; border-collapse:collapse; }
-  td { padding:10px 0; font-size:16px; border-bottom:1px solid #eee; }
-  td:first-child { color:#333; }
-  td:last-child { color:#999; text-align:right; width:80px; }
+  body { font-family: "Noto Sans CJK SC","Microsoft YaHei","PingFang SC",sans-serif; }
+  .page { width:210mm; height:297mm; padding:50px 60px; page-break-after:always; background:#f8fafc; position:relative; }
+  .bg-dots { position:absolute; inset:0; background:radial-gradient(circle,#d1d5db 1px,transparent 1px); background-size:24px 24px; opacity:.5; }
+  .content { position:relative; z-index:1; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:36px; text-align:center; color:#1e293b; }
+  .deco { width:40px; height:3px; background:linear-gradient(90deg,#6366f1,#8b5cf6); border-radius:2px; margin:0 auto 36px; }
+  table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.04); }
+  tr { border-bottom:1px solid #f1f5f9; }
+  tr:last-child { border-bottom:none; }
+  td { padding:14px 20px; font-size:15px; }
+  td:first-child { color:#334155; font-weight:500; }
+  td:last-child { color:#94a3b8; text-align:right; width:80px; font-variant-numeric:tabular-nums; }
 </style></head><body>
 <div class="page">
-  <h1>📋 目 录</h1>
-  <table>{{ROWS}}</table>
+  <div class="bg-dots"></div>
+  <div class="content">
+    <h1>📋 目 录</h1>
+    <div class="deco"></div>
+    <table>{{ROWS}}</table>
+  </div>
 </div>
 </body></html>

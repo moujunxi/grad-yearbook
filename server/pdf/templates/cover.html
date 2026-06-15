@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
-  .page { width:210mm; height:297mm; display:flex; flex-direction:column; align-items:center; justify-content:center; background:radial-gradient(circle,#cbd5e1 1px,transparent 1px);background-size:20px 20px;background-color:#f8fafc; color:#1e293b; page-break-after:always; }
-  h1 { font-size:48px; margin-bottom:16px; }
-  .sub { font-size:20px; opacity:.85; margin-bottom:8px; }
-  .count { font-size:16px; opacity:.7; margin-top:24px; }
-  .deco { width:120px; height:2px; background:#1e293b; margin:24px 0; opacity:.3; }
+  body { font-family: "Noto Sans CJK SC","Microsoft YaHei","PingFang SC",sans-serif; }
+  .page { width:210mm; height:297mm; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#f8fafc; color:#1e293b; page-break-after:always; position:relative; overflow:hidden; }
+  .bg-dots { position:absolute; inset:0; background:radial-gradient(circle,#d1d5db 1px,transparent 1px); background-size:24px 24px; opacity:.5; }
+  .card { position:relative; z-index:1; text-align:center; padding:60px 80px; background:#fff; border-radius:20px; box-shadow:0 4px 24px rgba(0,0,0,.06); }
+  .icon { font-size:56px; margin-bottom:20px; }
+  h1 { font-size:42px; font-weight:700; letter-spacing:2px; color:#1e293b; margin-bottom:12px; }
+  .deco { width:60px; height:3px; background:linear-gradient(90deg,#6366f1,#8b5cf6); border-radius:2px; margin:20px auto; }
+  .sub { font-size:18px; color:#64748b; margin-bottom:6px; }
+  .count { font-size:15px; color:#94a3b8; margin-top:16px; }
 </style></head><body>
 <div class="page">
-  <h1>{{TITLE}}</h1>
-  <div class="deco"></div>
-  <p class="sub">{{DATE}}</p>
-  <p class="count">共 {{COUNT}} 位同学</p>
+  <div class="bg-dots"></div>
+  <div class="card">
+    <div class="icon">🎓</div>
+    <h1>{{TITLE}}</h1>
+    <div class="deco"></div>
+    <p class="sub">{{DATE}}</p>
+    <p class="count">共 {{COUNT}} 位同学</p>
+  </div>
 </div>
 </body></html>
