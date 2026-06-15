@@ -191,7 +191,7 @@ export default function FormPage() {
           <F label="留言（仅他可见）">
             <textarea {...register('secret_message')} rows={3}
               className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none"
-              placeholder="想说又不想被别人看到的话..." />
+               />
           </F>
         </section>
 
