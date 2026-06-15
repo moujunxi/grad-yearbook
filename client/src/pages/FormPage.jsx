@@ -187,8 +187,8 @@ export default function FormPage() {
 
         {/* 私密留言 */}
         <section className="bg-white rounded-xl shadow-sm p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-800">💌 给他的悄悄话</h2>
-          <F label="私密留言（仅他可见）">
+          <h2 className="text-lg font-semibold text-gray-800">💌 留言</h2>
+          <F label="留言（仅他可见）">
             <textarea {...register('secret_message')} rows={3}
               className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none"
               placeholder="想说又不想被别人看到的话..." />
