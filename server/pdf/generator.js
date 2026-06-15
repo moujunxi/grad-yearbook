@@ -8,14 +8,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const TPL = (name) => readFileSync(join(__dirname, 'templates', name), 'utf-8');
 
 const THEME_CSS = {
-  'solid-indigo':  'background:#6366f1',
-  'solid-rose':    'background:#f43f5e',
-  'solid-emerald': 'background:#10b981',
-  'solid-amber':   'background:#f59e0b',
-  'grade-sunset':  'background:linear-gradient(135deg,#f97316,#ec4899)',
-  'grade-ocean':   'background:linear-gradient(135deg,#06b6d4,#3b82f6)',
-  'grade-forest':  'background:linear-gradient(135deg,#22c55e,#059669)',
-  'grade-twilight':'background:linear-gradient(135deg,#8b5cf6,#1e1b4b)',
   'pattern-dots':  'background:radial-gradient(circle,#cbd5e1 1px,transparent 1px);background-size:20px 20px;background-color:#f8fafc',
   'pattern-grid':  'background:linear-gradient(#e2e8f0 1px,transparent 1px),linear-gradient(90deg,#e2e8f0 1px,transparent 1px);background-size:24px 24px;background-color:#f8fafc',
   'pattern-cross': 'background:repeating-linear-gradient(45deg,#e2e8f0 0,#e2e8f0 1px,transparent 0,transparent 10px);background-color:#f8fafc',
