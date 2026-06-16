@@ -9,13 +9,6 @@ const TPL = (name) => readFileSync(join(__dirname, 'templates', name), 'utf-8');
 
 const PUBLIC_DIR = join(__dirname, '..', '..', 'client', 'public');
 
-const PATTERN_CSS = {
-  'pattern-dots':  'background:radial-gradient(circle,#cbd5e1 1px,transparent 1px);background-size:20px 20px;background-color:#f8fafc',
-  'pattern-grid':  'background:linear-gradient(#e2e8f0 1px,transparent 1px),linear-gradient(90deg,#e2e8f0 1px,transparent 1px);background-size:24px 24px;background-color:#f8fafc',
-  'pattern-cross': 'background:repeating-linear-gradient(45deg,#e2e8f0 0,#e2e8f0 1px,transparent 0,transparent 10px);background-color:#f8fafc',
-  'pattern-waves': 'background:linear-gradient(0deg,#bfdbfe 0%,#eff6ff 50%,#bfdbfe 100%);background-color:#eff6ff',
-};
-
 const IMAGE_FILES = {
   'img-1': '1781607256353.png',
   'img-2': '1781607264559.png',
@@ -26,7 +19,6 @@ const IMAGE_FILES = {
 };
 
 function getThemeCSS(themeKey) {
-  if (PATTERN_CSS[themeKey]) return PATTERN_CSS[themeKey];
   if (IMAGE_FILES[themeKey]) {
     const imgPath = join(PUBLIC_DIR, IMAGE_FILES[themeKey]);
     if (existsSync(imgPath)) {
@@ -35,7 +27,7 @@ function getThemeCSS(themeKey) {
       return `background:url(data:image/png;base64,${b64}) center/cover no-repeat;background-color:#f8fafc`;
     }
   }
-  return PATTERN_CSS['pattern-dots'];
+  return `background:url(data:image/png;base64,${readFileSync(join(PUBLIC_DIR, IMAGE_FILES['img-1'])).toString('base64')}) center/cover no-repeat;background-color:#f8fafc`;
 }
 
 function avatarBase64(entry) {
@@ -56,7 +48,7 @@ function renderEntry(e, messages) {
     ['微信', e.wechat], ['QQ', e.qq], ['手机', e.phone], ['邮箱', e.email],
   ].filter(([,v]) => v);
   const infoRows = fields.map(([k,v]) => `<dt>${k}</dt><dd>${v||'-'}</dd>`).join('');
-  const isLight = (e.bg_theme || '').startsWith('pattern') || (e.bg_theme || '').startsWith('img');
+  const isLight = true;
 
   const prefItems = [
     ['喜欢的颜色', e.favorite_color], ['喜欢的书籍', e.favorite_book],

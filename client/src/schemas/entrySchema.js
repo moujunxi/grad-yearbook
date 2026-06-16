@@ -40,7 +40,7 @@ export const entrySchema = z.object({
   personality_tags: z.array(z.string()).optional().default([]),
   favorite_tags: z.array(z.string()).optional().default([]),
   label: z.string().max(50).optional().default(''),
-  bg_theme: z.string().optional().default('pattern-dots'),
+  bg_theme: z.string().optional().default('img-1'),
   custom_answers: z.record(z.string(), z.string()).optional().default({}),
   secret_message: z.string().max(1000).optional().default(''),
   signature: z.string().optional().default(''),
