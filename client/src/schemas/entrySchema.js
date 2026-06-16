@@ -5,8 +5,11 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/web
 
 export const entrySchema = z.object({
   name: z.string().min(1, '姓名不能为空').max(50, '姓名最多50字'),
+  nickname: z.string().max(50).optional().default(''),
   gender: z.string().max(4).optional().default(''),
   class_name: z.string().max(50).optional().default(''),
+  birthday: z.string().max(20).optional().default(''),
+  zodiac: z.string().max(10).optional().default(''),
   avatar: z
     .any()
     .optional()
@@ -24,14 +27,24 @@ export const entrySchema = z.object({
     .optional()
     .default('')
     .refine((v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), '邮箱格式不正确'),
-  bio: z.string().max(500).optional().default(''),
-  motto: z.string().max(200).optional().default(''),
+  favorite_color: z.string().max(50).optional().default(''),
+  favorite_book: z.string().max(100).optional().default(''),
+  favorite_movie: z.string().max(100).optional().default(''),
+  favorite_star: z.string().max(50).optional().default(''),
+  favorite_singer: z.string().max(100).optional().default(''),
+  favorite_song: z.string().max(100).optional().default(''),
+  favorite_food: z.string().max(100).optional().default(''),
+  dream_place: z.string().max(100).optional().default(''),
   future: z.string().max(500).optional().default(''),
+  first_meeting: z.string().max(500).optional().default(''),
+  personality_tags: z.array(z.string()).optional().default([]),
   favorite_tags: z.array(z.string()).optional().default([]),
   label: z.string().max(50).optional().default(''),
-  bg_theme: z.string().optional().default('solid-indigo'),
+  bg_theme: z.string().optional().default('pattern-dots'),
   custom_answers: z.record(z.string(), z.string()).optional().default({}),
   secret_message: z.string().max(1000).optional().default(''),
   signature: z.string().optional().default(''),
   identity_code: z.string().max(50).optional().default(''),
+  bio: z.string().max(500).optional().default(''),
+  motto: z.string().max(200).optional().default(''),
 });

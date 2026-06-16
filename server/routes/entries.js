@@ -24,18 +24,24 @@ router.post('/', upload.single('avatar'), async (req, res) => {
     const b = req.body;
     b.favorite_tags = b.favorite_tags ? JSON.parse(b.favorite_tags) : [];
     b.custom_answers = b.custom_answers ? JSON.parse(b.custom_answers) : {};
+    b.personality_tags = b.personality_tags ? JSON.parse(b.personality_tags) : [];
     const avatarPath = req.file ? `uploads/${req.file.filename}` : null;
 
     const signatureData = (b.signature || '').trim();
     const identityCode = (b.identity_code || '').trim();
 
     db.run(
-      `INSERT INTO entries (name,gender,class_name,avatar_path,wechat,qq,phone,email,bio,motto,future,favorite_tags,custom_answers,label,bg_theme,signature,identity_code)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [b.name||'', b.gender||'', b.class_name||'', avatarPath, b.wechat||'', b.qq||'', b.phone||'',
-       b.email||'', b.bio||'', b.motto||'', b.future||'',
+      `INSERT INTO entries (name,nickname,gender,class_name,birthday,zodiac,avatar_path,wechat,qq,phone,email,favorite_color,favorite_book,favorite_movie,favorite_star,favorite_singer,favorite_song,favorite_food,dream_place,future,first_meeting,personality_tags,bio,motto,favorite_tags,custom_answers,label,bg_theme,signature,identity_code)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      [b.name||'', b.nickname||'', b.gender||'', b.class_name||'', b.birthday||'', b.zodiac||'',
+       avatarPath, b.wechat||'', b.qq||'', b.phone||'', b.email||'',
+       b.favorite_color||'', b.favorite_book||'', b.favorite_movie||'', b.favorite_star||'',
+       b.favorite_singer||'', b.favorite_song||'', b.favorite_food||'', b.dream_place||'',
+       b.future||'', b.first_meeting||'',
+       JSON.stringify(b.personality_tags),
+       b.bio||'', b.motto||'',
        JSON.stringify(b.favorite_tags), JSON.stringify(b.custom_answers),
-       b.label||'', b.bg_theme||'solid-indigo', signatureData, identityCode]
+       b.label||'', b.bg_theme||'pattern-dots', signatureData, identityCode]
     );
 
     const id = db.exec("SELECT last_insert_rowid()")[0].values[0][0];
@@ -44,12 +50,7 @@ router.post('/', upload.single('avatar'), async (req, res) => {
     persist();
 
     res.status(201).json({
-      id, name: b.name, gender: b.gender||'', class_name: b.class_name||'',
-      avatar_path: avatarPath, wechat: b.wechat||'', qq: b.qq||'', phone: b.phone||'',
-      email: b.email||'', bio: b.bio||'', motto: b.motto||'', future: b.future||'',
-      favorite_tags: b.favorite_tags, custom_answers: b.custom_answers,
-      label: b.label||'', bg_theme: b.bg_theme||'solid-indigo',
-      signature: signatureData, identity_code: identityCode,
+      id, name: b.name, nickname: b.nickname||'',
       created_at: new Date().toISOString(),
     });
   } catch (e) {

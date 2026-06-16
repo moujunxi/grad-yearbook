@@ -8,7 +8,12 @@ function rowToEntry(r) {
     wechat: r[5], qq: r[6], phone: r[7], email: r[8], bio: r[9], motto: r[10],
     future: r[11], favorite_tags: JSON.parse(r[12]||'[]'), custom_answers: JSON.parse(r[13]||'{}'),
     label: r[14], bg_theme: r[15], signature: r[16], identity_code: r[17],
-    is_visible: r[18], created_at: r[19] };
+    nickname: r[18], birthday: r[19], zodiac: r[20],
+    favorite_color: r[21], favorite_book: r[22], favorite_movie: r[23],
+    favorite_star: r[24], favorite_singer: r[25], favorite_song: r[26],
+    favorite_food: r[27], dream_place: r[28], first_meeting: r[29],
+    personality_tags: JSON.parse(r[30]||'[]'),
+    is_visible: r[31], created_at: r[32] };
 }
 
 // 列表（分页+搜索）
@@ -61,17 +66,20 @@ router.put('/:id', async (req, res) => {
   try {
     const db = await getDb();
     const b = req.body;
-    const fields = 'name,gender,class_name,wechat,qq,phone,email,bio,motto,future,label,bg_theme';
-    const vals = [b.name||'', b.gender||'', b.class_name||'', b.wechat||'', b.qq||'', b.phone||'',
-      b.email||'', b.bio||'', b.motto||'', b.future||'', b.label||'', b.bg_theme||'solid-indigo'];
-    if (b.favorite_tags) vals.splice(6, 0, JSON.stringify(b.favorite_tags));
-    // Actually just keep it simple
-    db.run(`UPDATE entries SET name=?,gender=?,class_name=?,wechat=?,qq=?,phone=?,email=?,bio=?,
-      motto=?,future=?,favorite_tags=?,custom_answers=?,label=?,bg_theme=?,signature=?,identity_code=? WHERE id=?`,
-      [b.name||'', b.gender||'', b.class_name||'', b.wechat||'', b.qq||'', b.phone||'',
-       b.email||'', b.bio||'', b.motto||'', b.future||'',
+    db.run(`UPDATE entries SET name=?,nickname=?,gender=?,class_name=?,birthday=?,zodiac=?,
+      wechat=?,qq=?,phone=?,email=?,favorite_color=?,favorite_book=?,favorite_movie=?,favorite_star=?,
+      favorite_singer=?,favorite_song=?,favorite_food=?,dream_place=?,future=?,first_meeting=?,
+      personality_tags=?,bio=?,motto=?,favorite_tags=?,custom_answers=?,label=?,bg_theme=?,
+      signature=?,identity_code=? WHERE id=?`,
+      [b.name||'', b.nickname||'', b.gender||'', b.class_name||'', b.birthday||'', b.zodiac||'',
+       b.wechat||'', b.qq||'', b.phone||'', b.email||'',
+       b.favorite_color||'', b.favorite_book||'', b.favorite_movie||'', b.favorite_star||'',
+       b.favorite_singer||'', b.favorite_song||'', b.favorite_food||'', b.dream_place||'',
+       b.future||'', b.first_meeting||'',
+       JSON.stringify(b.personality_tags||[]),
+       b.bio||'', b.motto||'',
        JSON.stringify(b.favorite_tags||[]), JSON.stringify(b.custom_answers||{}),
-       b.label||'', b.bg_theme||'solid-indigo', (b.signature||''), (b.identity_code||''), +req.params.id]);
+       b.label||'', b.bg_theme||'pattern-dots', (b.signature||''), (b.identity_code||''), +req.params.id]);
     persist();
     res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }

@@ -24,23 +24,38 @@ function avatarBase64(entry) {
   return `<img class="avatar" src="data:${mime};base64,${buf.toString('base64')}" />`;
 }
 
-function renderEntry(e) {
+function renderEntry(e, messages) {
   const tpl = TPL('entry.html');
   const fields = [
-    ['性别', e.gender], ['班级', e.class_name], ['微信', e.wechat], ['QQ', e.qq],
-    ['手机', e.phone], ['邮箱', e.email], ['未来', e.future],
+    ['昵称', e.nickname], ['生日', e.birthday], ['星座', e.zodiac],
+    ['性别', e.gender], ['班级', e.class_name],
+    ['微信', e.wechat], ['QQ', e.qq], ['手机', e.phone], ['邮箱', e.email],
   ].filter(([,v]) => v);
   const infoRows = fields.map(([k,v]) => `<dt>${k}</dt><dd>${v||'-'}</dd>`).join('');
   const isLight = (e.bg_theme || '').startsWith('pattern');
 
+  const prefItems = [
+    ['喜欢的颜色', e.favorite_color], ['喜欢的书籍', e.favorite_book],
+    ['喜欢的电影', e.favorite_movie], ['喜欢的明星', e.favorite_star],
+    ['喜欢的歌手', e.favorite_singer], ['喜欢的歌曲', e.favorite_song],
+    ['爱吃的食物', e.favorite_food], ['想去的地方', e.dream_place],
+  ].filter(([,v]) => v);
+  const prefHtml = prefItems.length
+    ? `<div class="pref-box"><div class="pref-grid">${prefItems.map(([k,v]) => `<div class="pref-item"><span class="pref-label">${k}</span><span class="pref-value">${v}</span></div>`).join('')}</div></div>`
+    : '';
+
   let html = tpl
     .replace('{{THEME_CLASS}}', isLight ? 'light' : '')
-    .replace('{{THEME_BG}}', THEME_CSS[e.bg_theme] || THEME_CSS['solid-indigo'])
+    .replace('{{THEME_BG}}', THEME_CSS[e.bg_theme] || THEME_CSS['pattern-dots'])
     .replace('{{AVATAR}}', avatarBase64(e))
     .replace('{{NAME}}', e.name || '')
     .replace('{{INFO_ROWS}}', infoRows)
     .replace('{{LABEL_HTML}}', e.label ? `<span class="label">${e.label}</span>` : '')
     .replace('{{MOTTO_HTML}}', e.motto ? `<p class="motto">"${e.motto}"</p>` : '')
+    .replace('{{PREF_HTML}}', prefHtml)
+    .replace('{{FUTURE_HTML}}', e.future ? `<div class="future-box"><span class="future-label">人生的梦想</span><p>${e.future}</p></div>` : '')
+    .replace('{{MEETING_HTML}}', e.first_meeting ? `<div class="future-box"><span class="future-label">我们第一次见面的情形</span><p>${e.first_meeting}</p></div>` : '')
+    .replace('{{PERSONALITY_HTML}}', e.personality_tags?.length ? `<div class="tags">${e.personality_tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '')
     .replace('{{BIO_HTML}}', e.bio ? `<div class="bio-box"><h3>个人介绍</h3><p>${e.bio}</p></div>` : '')
     .replace('{{TAGS_HTML}}', e.favorite_tags?.length ? `<div class="tags">${e.favorite_tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : '')
     .replace('{{QA_HTML}}', Object.keys(e.custom_answers||{}).length
@@ -48,6 +63,9 @@ function renderEntry(e) {
       : '')
     .replace('{{SIGNATURE_HTML}}', e.signature
       ? `<div class="signature-box"><p class="sig-label">✍️ 手写签名</p><img src="${e.signature}" class="sig-img" alt="签名" /></div>`
+      : '')
+    .replace('{{MESSAGES_HTML}}', messages?.length
+      ? `<div class="messages-box"><h3 class="msg-title">💌 留言</h3>${messages.map(m => `<div class="msg-item"><p class="msg-body">${m}</p></div>`).join('')}</div>`
       : '');
 
   html = html.replace(/\{\{[A-Z_]+\}\}/g, '');
@@ -62,7 +80,12 @@ export async function generatePdf() {
     wechat: r[5], qq: r[6], phone: r[7], email: r[8], bio: r[9], motto: r[10],
     future: r[11], favorite_tags: JSON.parse(r[12]||'[]'), custom_answers: JSON.parse(r[13]||'{}'),
     label: r[14], bg_theme: r[15], signature: r[16], identity_code: r[17],
-    is_visible: r[18], created_at: r[19],
+    nickname: r[18], birthday: r[19], zodiac: r[20],
+    favorite_color: r[21], favorite_book: r[22], favorite_movie: r[23],
+    favorite_star: r[24], favorite_singer: r[25], favorite_song: r[26],
+    favorite_food: r[27], dream_place: r[28], first_meeting: r[29],
+    personality_tags: JSON.parse(r[30]||'[]'),
+    is_visible: r[31], created_at: r[32],
   }));
 
   // Cover
@@ -78,20 +101,10 @@ export async function generatePdf() {
   html += TPL('toc.html').replace('{{ROWS}}', tocRows);
 
   // Entry pages
-  entries.forEach(e => { html += renderEntry(e); });
-
-  // Secrets
-  let secretsHtml = '';
   const allMsgs = db.exec("SELECT entry_id, content FROM secret_messages WHERE content != '' AND content IS NOT NULL");
   const msgMap = {};
   (allMsgs[0]?.values || []).forEach(([eid, c]) => { if (!msgMap[eid]) msgMap[eid] = []; msgMap[eid].push(c); });
-  for (const e of entries) {
-    (msgMap[e.id] || []).forEach((content) => {
-      secretsHtml += `<div class="msg-block"><p class="from">来自：${e.name}</p><p class="body">${content}</p></div>`;
-    });
-  }
-  if (!secretsHtml) secretsHtml = '<p class="empty">暂无私密留言</p>';
-  html += TPL('secrets.html').replace('{{ROWS}}', secretsHtml);
+  entries.forEach(e => { html += renderEntry(e, msgMap[e.id]); });
 
   // Render PDF
   const browser = await puppeteer.launch({

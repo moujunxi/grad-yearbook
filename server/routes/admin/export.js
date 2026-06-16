@@ -10,7 +10,13 @@ function getEntries(db) {
     id: r[0], name: r[1], gender: r[2], class_name: r[3], avatar_path: r[4],
     wechat: r[5], qq: r[6], phone: r[7], email: r[8], bio: r[9], motto: r[10],
     future: r[11], favorite_tags: JSON.parse(r[12]||'[]'), custom_answers: JSON.parse(r[13]||'{}'),
-    label: r[14], bg_theme: r[15], is_visible: r[16], created_at: r[17],
+    label: r[14], bg_theme: r[15], signature: r[16], identity_code: r[17],
+    nickname: r[18], birthday: r[19], zodiac: r[20],
+    favorite_color: r[21], favorite_book: r[22], favorite_movie: r[23],
+    favorite_star: r[24], favorite_singer: r[25], favorite_song: r[26],
+    favorite_food: r[27], dream_place: r[28], first_meeting: r[29],
+    personality_tags: JSON.parse(r[30]||'[]'),
+    is_visible: r[31], created_at: r[32],
   }));
 }
 
@@ -38,11 +44,17 @@ router.get('/excel', async (_req, res) => {
     const wb = new ExcelJS.Workbook();
     const ws = wb.addWorksheet('同学录');
     ws.columns = [
-      { header: 'ID', key: 'id' }, { header: '姓名', key: 'name' }, { header: '性别', key: 'gender' },
-      { header: '班级', key: 'class_name' }, { header: '微信', key: 'wechat' }, { header: 'QQ', key: 'qq' },
-      { header: '手机', key: 'phone' }, { header: '邮箱', key: 'email' }, { header: '介绍', key: 'bio' },
-      { header: '座右铭', key: 'motto' }, { header: '未来', key: 'future' },
-      { header: '标签', key: 'label' }, { header: '主题', key: 'bg_theme' },
+      { header: 'ID', key: 'id' }, { header: '姓名', key: 'name' }, { header: '昵称', key: 'nickname' },
+      { header: '性别', key: 'gender' }, { header: '班级', key: 'class_name' },
+      { header: '生日', key: 'birthday' }, { header: '星座', key: 'zodiac' },
+      { header: '微信', key: 'wechat' }, { header: 'QQ', key: 'qq' },
+      { header: '手机', key: 'phone' }, { header: '邮箱', key: 'email' },
+      { header: '喜欢的颜色', key: 'favorite_color' }, { header: '喜欢的书籍', key: 'favorite_book' },
+      { header: '喜欢的电影', key: 'favorite_movie' }, { header: '喜欢的明星', key: 'favorite_star' },
+      { header: '喜欢的歌手', key: 'favorite_singer' }, { header: '喜欢的歌曲', key: 'favorite_song' },
+      { header: '爱吃的食物', key: 'favorite_food' }, { header: '想去的地方', key: 'dream_place' },
+      { header: '梦想', key: 'future' }, { header: '第一次见面', key: 'first_meeting' },
+      { header: '性格标签', key: 'personality_tags' },
       { header: '可见', key: 'is_visible' }, { header: '时间', key: 'created_at' },
     ];
     entries.forEach(e => ws.addRow(e));

@@ -2,24 +2,31 @@
 <html><head><meta charset="utf-8"><style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family: "Noto Sans CJK SC","Microsoft YaHei","PingFang SC",sans-serif; }
-  .page { width:210mm; height:297mm; display:flex; flex-direction:column; align-items:center; padding:36px 40px; page-break-after:always; position:relative; }
+  .page { width:210mm; height:297mm; display:flex; flex-direction:column; align-items:center; padding:32px 36px; page-break-after:always; position:relative; overflow:hidden; }
   .content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; width:100%; height:100%; }
-  .avatar { width:88px; height:88px; border-radius:50%; object-fit:cover; border:3px solid rgba(255,255,255,.6); margin-bottom:12px; box-shadow:0 4px 16px rgba(0,0,0,.1); }
-  .avatar-placeholder { width:88px; height:88px; border-radius:50%; background:rgba(255,255,255,.35); display:flex; align-items:center; justify-content:center; font-size:40px; margin-bottom:12px; }
-  /* dark theme (default): white text */
-  .name { font-size:28px; font-weight:700; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.15); letter-spacing:1px; }
-  .label { margin-top:6px; padding:3px 14px; background:rgba(255,255,255,.25); backdrop-filter:blur(4px); border-radius:99px; font-size:13px; color:#fff; font-weight:500; }
-  .motto { margin-top:10px; font-size:15px; color:rgba(255,255,255,.85); font-style:italic; }
-  .divider { width:40px; height:2px; background:rgba(255,255,255,.3); border-radius:1px; margin:16px 0; }
-  .info { display:grid; grid-template-columns:1fr 1fr; gap:6px 32px; width:100%; max-width:440px; }
-  .info dt { font-size:11px; color:rgba(255,255,255,.55); text-transform:uppercase; letter-spacing:.5px; }
-  .info dd { font-size:14px; color:#fff; margin-bottom:4px; font-weight:500; }
-  .bio-box { width:100%; max-width:440px; background:rgba(255,255,255,.18); backdrop-filter:blur(4px); border-radius:12px; padding:14px 16px; margin-top:14px; }
-  .bio-box h3 { font-size:12px; color:rgba(255,255,255,.6); margin-bottom:4px; font-weight:600; }
-  .bio-box p { font-size:13px; color:#fff; line-height:1.7; }
-  .tags { margin-top:10px; display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
-  .tag { padding:3px 12px; background:rgba(255,255,255,.2); backdrop-filter:blur(4px); border-radius:99px; font-size:12px; color:#fff; font-weight:500; }
-  /* light theme: dark text */
+  .avatar { width:80px; height:80px; border-radius:50%; object-fit:cover; border:3px solid rgba(255,255,255,.6); margin-bottom:10px; box-shadow:0 4px 16px rgba(0,0,0,.1); }
+  .avatar-placeholder { width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,.35); display:flex; align-items:center; justify-content:center; font-size:36px; margin-bottom:10px; }
+  .name { font-size:26px; font-weight:700; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.15); letter-spacing:1px; }
+  .label { margin-top:4px; padding:2px 12px; background:rgba(255,255,255,.25); border-radius:99px; font-size:12px; color:#fff; font-weight:500; }
+  .motto { margin-top:8px; font-size:14px; color:rgba(255,255,255,.85); font-style:italic; }
+  .divider { width:36px; height:2px; background:rgba(255,255,255,.3); border-radius:1px; margin:12px 0; }
+  .info { display:grid; grid-template-columns:1fr 1fr; gap:4px 28px; width:100%; max-width:420px; }
+  .info dt { font-size:10px; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:.5px; }
+  .info dd { font-size:13px; color:#fff; margin-bottom:3px; font-weight:500; }
+  .pref-box { width:100%; max-width:420px; margin-top:12px; background:rgba(255,255,255,.15); border-radius:12px; padding:12px 14px; }
+  .pref-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px 16px; }
+  .pref-item { display:flex; gap:6px; font-size:12px; }
+  .pref-label { color:rgba(255,255,255,.55); flex-shrink:0; }
+  .pref-value { color:#fff; font-weight:500; }
+  .future-box { width:100%; max-width:420px; margin-top:10px; font-size:12px; }
+  .future-label { color:rgba(255,255,255,.55); font-weight:600; display:block; margin-bottom:3px; }
+  .future-box p { color:#fff; line-height:1.6; font-size:13px; }
+  .tags { margin-top:8px; display:flex; flex-wrap:wrap; gap:5px; justify-content:center; }
+  .tag { padding:2px 10px; background:rgba(255,255,255,.2); border-radius:99px; font-size:11px; color:#fff; font-weight:500; }
+  .bio-box { width:100%; max-width:420px; background:rgba(255,255,255,.15); border-radius:12px; padding:12px 14px; margin-top:10px; }
+  .bio-box h3 { font-size:11px; color:rgba(255,255,255,.6); margin-bottom:3px; font-weight:600; }
+  .bio-box p { font-size:12px; color:#fff; line-height:1.6; }
+  /* light theme */
   .page.light .content { color:#1e293b; }
   .page.light .avatar { border-color:rgba(0,0,0,.08); }
   .page.light .avatar-placeholder { background:rgba(0,0,0,.05); }
@@ -29,20 +36,27 @@
   .page.light .divider { background:rgba(0,0,0,.1); }
   .page.light .info dt { color:#94a3b8; }
   .page.light .info dd { color:#334155; }
+  .page.light .pref-box { background:rgba(255,255,255,.7); }
+  .page.light .pref-label { color:#94a3b8; }
+  .page.light .pref-value { color:#334155; }
+  .page.light .future-label { color:#94a3b8; }
+  .page.light .future-box p { color:#334155; }
+  .page.light .tag { background:rgba(0,0,0,.06); color:#475569; }
   .page.light .bio-box { background:rgba(255,255,255,.7); }
   .page.light .bio-box h3 { color:#64748b; }
   .page.light .bio-box p { color:#334155; }
-  .page.light .tag { background:rgba(0,0,0,.06); color:#475569; }
-  .qa-box { width:100%; max-width:440px; margin-top:14px; }
-  .qa-item { margin-bottom:8px; }
-  .qa-item .q { font-size:11px; color:rgba(255,255,255,.55); text-transform:uppercase; letter-spacing:.5px; margin-bottom:2px; }
-  .qa-item .a { font-size:13px; color:#fff; font-weight:500; }
-  .page.light .qa-item .q { color:#94a3b8; }
-  .page.light .qa-item .a { color:#334155; }
-  .signature-box { margin-top:16px; text-align:center; }
-  .sig-label { font-size:10px; color:rgba(255,255,255,.45); margin-bottom:6px; letter-spacing:.5px; }
-  .sig-img { max-width:160px; max-height:50px; border-radius:8px; }
+  .signature-box { margin-top:12px; text-align:center; }
+  .sig-label { font-size:10px; color:rgba(255,255,255,.45); margin-bottom:4px; letter-spacing:.5px; }
+  .sig-img { max-width:140px; max-height:45px; border-radius:8px; }
   .page.light .sig-label { color:#94a3b8; }
+  .messages-box { width:100%; max-width:420px; margin-top:12px; padding-top:10px; border-top:1px dashed rgba(255,255,255,.2); }
+  .page.light .messages-box { border-top-color:rgba(0,0,0,.1); }
+  .msg-title { font-size:12px; font-weight:600; color:rgba(255,255,255,.7); margin-bottom:6px; }
+  .page.light .msg-title { color:#64748b; }
+  .msg-item { background:rgba(255,255,255,.15); border-radius:8px; padding:8px 12px; margin-bottom:5px; }
+  .page.light .msg-item { background:rgba(0,0,0,.04); }
+  .msg-body { font-size:12px; color:rgba(255,255,255,.9); line-height:1.6; }
+  .page.light .msg-body { color:#475569; }
 </style></head><body>
 <div class="page {{THEME_CLASS}}" style="{{THEME_BG}}">
   <div class="content">
@@ -54,10 +68,15 @@
     <dl class="info">
       {{INFO_ROWS}}
     </dl>
+    {{PREF_HTML}}
+    {{FUTURE_HTML}}
+    {{MEETING_HTML}}
+    {{PERSONALITY_HTML}}
     {{BIO_HTML}}
     {{TAGS_HTML}}
     {{QA_HTML}}
     {{SIGNATURE_HTML}}
+    {{MESSAGES_HTML}}
   </div>
 </div>
 </body></html>

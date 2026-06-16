@@ -40,12 +40,12 @@ export async function getDb() {
     try {
       const cols = db.exec("PRAGMA table_info(entries)")[0].values;
       const colNames = cols.map(c => c[1]);
-      if (!colNames.includes('signature')) {
-        db.run("ALTER TABLE entries ADD COLUMN signature TEXT");
-      }
-      if (!colNames.includes('identity_code')) {
-        db.run("ALTER TABLE entries ADD COLUMN identity_code TEXT");
-      }
+      const newCols = ['signature', 'identity_code', 'nickname', 'birthday', 'zodiac', 'favorite_color', 'favorite_book', 'favorite_movie', 'favorite_star', 'favorite_singer', 'favorite_song', 'favorite_food', 'dream_place', 'first_meeting', 'personality_tags'];
+      newCols.forEach(col => {
+        if (!colNames.includes(col)) {
+          db.run(`ALTER TABLE entries ADD COLUMN ${col} TEXT`);
+        }
+      });
     } catch (_) { /* entries 表可能还不存在 */ }
 
     // 首次启动 seed 默认管理员
