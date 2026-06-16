@@ -7,12 +7,36 @@ import { getDb } from '../db/init.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const TPL = (name) => readFileSync(join(__dirname, 'templates', name), 'utf-8');
 
-const THEME_CSS = {
+const PUBLIC_DIR = join(__dirname, '..', '..', 'client', 'public');
+
+const PATTERN_CSS = {
   'pattern-dots':  'background:radial-gradient(circle,#cbd5e1 1px,transparent 1px);background-size:20px 20px;background-color:#f8fafc',
   'pattern-grid':  'background:linear-gradient(#e2e8f0 1px,transparent 1px),linear-gradient(90deg,#e2e8f0 1px,transparent 1px);background-size:24px 24px;background-color:#f8fafc',
   'pattern-cross': 'background:repeating-linear-gradient(45deg,#e2e8f0 0,#e2e8f0 1px,transparent 0,transparent 10px);background-color:#f8fafc',
   'pattern-waves': 'background:linear-gradient(0deg,#bfdbfe 0%,#eff6ff 50%,#bfdbfe 100%);background-color:#eff6ff',
 };
+
+const IMAGE_FILES = {
+  'img-1': '1781607256353.png',
+  'img-2': '1781607264559.png',
+  'img-3': '1781607268050.png',
+  'img-4': '1781607276081.png',
+  'img-5': '1781607280060.png',
+  'img-6': '1781607287404.png',
+};
+
+function getThemeCSS(themeKey) {
+  if (PATTERN_CSS[themeKey]) return PATTERN_CSS[themeKey];
+  if (IMAGE_FILES[themeKey]) {
+    const imgPath = join(PUBLIC_DIR, IMAGE_FILES[themeKey]);
+    if (existsSync(imgPath)) {
+      const buf = readFileSync(imgPath);
+      const b64 = buf.toString('base64');
+      return `background:url(data:image/png;base64,${b64}) center/cover no-repeat;background-color:#f8fafc`;
+    }
+  }
+  return PATTERN_CSS['pattern-dots'];
+}
 
 function avatarBase64(entry) {
   if (!entry.avatar_path) return '<div class="avatar-placeholder">📷</div>';
@@ -32,7 +56,7 @@ function renderEntry(e, messages) {
     ['微信', e.wechat], ['QQ', e.qq], ['手机', e.phone], ['邮箱', e.email],
   ].filter(([,v]) => v);
   const infoRows = fields.map(([k,v]) => `<dt>${k}</dt><dd>${v||'-'}</dd>`).join('');
-  const isLight = (e.bg_theme || '').startsWith('pattern');
+  const isLight = (e.bg_theme || '').startsWith('pattern') || (e.bg_theme || '').startsWith('img');
 
   const prefItems = [
     ['喜欢的颜色', e.favorite_color], ['喜欢的书籍', e.favorite_book],
@@ -46,7 +70,7 @@ function renderEntry(e, messages) {
 
   let html = tpl
     .replace('{{THEME_CLASS}}', isLight ? 'light' : '')
-    .replace('{{THEME_BG}}', THEME_CSS[e.bg_theme] || THEME_CSS['pattern-dots'])
+    .replace('{{THEME_BG}}', getThemeCSS(e.bg_theme))
     .replace('{{AVATAR}}', avatarBase64(e))
     .replace('{{NAME}}', e.name || '')
     .replace('{{INFO_ROWS}}', infoRows)

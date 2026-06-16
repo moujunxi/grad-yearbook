@@ -6,6 +6,7 @@ import { entrySchema } from '../schemas/entrySchema';
 import { fetchQuestions, submitEntry } from '../lib/api';
 import AvatarUpload from '../components/AvatarUpload';
 import ThemeSelector from '../components/ThemeSelector';
+import SignaturePad from '../components/SignaturePad';
 
 const F = ({ children, label, required }) => (
   <div className="space-y-1">
@@ -199,6 +200,16 @@ export default function FormPage() {
             <textarea {...register('secret_message')} rows={3}
               className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-indigo-400 focus:outline-none" />
           </F>
+        </section>
+
+        {/* 手写签名 */}
+        <section className="bg-white rounded-xl shadow-sm p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-gray-800">✍️ 个性签名</h2>
+          <p className="text-xs text-gray-400">可在下方签名区手写或绘制你的签名（可选）</p>
+          <Controller name="signature" control={control}
+            render={({ field: { value, onChange } }) => (
+              <SignaturePad value={value} onChange={onChange} />
+            )} />
         </section>
 
         {serverError && <p className="text-red-500 text-sm text-center bg-red-50 rounded-lg py-2">{serverError}</p>}
