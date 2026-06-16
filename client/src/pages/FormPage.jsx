@@ -7,6 +7,7 @@ import { fetchQuestions, submitEntry } from '../lib/api';
 import AvatarUpload from '../components/AvatarUpload';
 import ThemeSelector from '../components/ThemeSelector';
 import SignaturePad from '../components/SignaturePad';
+import IdentityCodeInput from '../components/IdentityCodeInput';
 
 const F = ({ children, label, required }) => (
   <div className="space-y-1">
@@ -216,6 +217,16 @@ export default function FormPage() {
           <Controller name="signature" control={control}
             render={({ field: { value, onChange } }) => (
               <SignaturePad value={value} onChange={onChange} />
+            )} />
+        </section>
+
+        {/* 身份验证码 */}
+        <section className="bg-white rounded-xl shadow-sm p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-gray-800">🔑 身份验证码</h2>
+          <p className="text-xs text-gray-400">如果你有专属身份码，在这里输入后会显示专属祝福语</p>
+          <Controller name="identity_code" control={control}
+            render={({ field: { value, onChange } }) => (
+              <IdentityCodeInput value={value} onChange={onChange} onVerified={setBlessingMessage} />
             )} />
         </section>
 
