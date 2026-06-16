@@ -202,6 +202,13 @@ export default function FormPage() {
           </F>
         </section>
 
+        {/* 选择卡片背景 */}
+        <section className="bg-white rounded-xl shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-gray-800 mb-3">选择卡片背景</h2>
+          <Controller name="bg_theme" control={control}
+            render={({ field }) => <ThemeSelector value={field.value} onChange={field.onChange} />} />
+        </section>
+
         {/* 手写签名 */}
         <section className="bg-white rounded-xl shadow-sm p-6 space-y-4">
           <h2 className="text-lg font-semibold text-gray-800">✍️ 个性签名</h2>
