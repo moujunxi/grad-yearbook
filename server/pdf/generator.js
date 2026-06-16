@@ -106,15 +106,23 @@ export async function generatePdf() {
 
   // Cover
   const now = new Date().toLocaleDateString('zh-CN', { year:'numeric',month:'long',day:'numeric' });
+  const coverBgPath = join(__dirname, 'templates', 'cover-bg.png');
+  const coverBg = existsSync(coverBgPath)
+    ? `data:image/png;base64,${readFileSync(coverBgPath).toString('base64')}`
+    : '';
   let html = TPL('cover.html')
-    .replace('{{TITLE}}', '🎓 同学录')
+    .replace('{{COVER_BG}}', coverBg)
     .replace('{{DATE}}', now)
     .replace('{{COUNT}}', String(entries.length));
 
   // TOC
+  const tocBgPath = join(__dirname, 'templates', 'toc-bg.png');
+  const tocBg = existsSync(tocBgPath)
+    ? `data:image/png;base64,${readFileSync(tocBgPath).toString('base64')}`
+    : '';
   const tocRows = entries.map((e, i) =>
     `<tr><td>${e.name}</td><td>${i + 3}</td></tr>`).join('');
-  html += TPL('toc.html').replace('{{ROWS}}', tocRows);
+  html += TPL('toc.html').replace('{{TOC_BG}}', tocBg).replace('{{ROWS}}', tocRows);
 
   // Entry pages
   const allMsgs = db.exec("SELECT entry_id, content FROM secret_messages WHERE content != '' AND content IS NOT NULL");
