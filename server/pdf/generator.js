@@ -96,12 +96,12 @@ export async function generatePdf() {
     wechat: r[5], qq: r[6], phone: r[7], email: r[8], bio: r[9], motto: r[10],
     future: r[11], favorite_tags: JSON.parse(r[12]||'[]'), custom_answers: JSON.parse(r[13]||'{}'),
     label: r[14], bg_theme: r[15], signature: r[16], identity_code: r[17],
-    nickname: r[18], birthday: r[19], zodiac: r[20],
-    favorite_color: r[21], favorite_book: r[22], favorite_movie: r[23],
-    favorite_star: r[24], favorite_singer: r[25], favorite_song: r[26],
-    favorite_food: r[27], dream_place: r[28], first_meeting: r[29],
-    personality_tags: JSON.parse(r[30]||'[]'),
-    is_visible: r[31], created_at: r[32],
+    is_visible: r[18], created_at: r[19],
+    nickname: r[20], birthday: r[21], zodiac: r[22],
+    favorite_color: r[23], favorite_book: r[24], favorite_movie: r[25],
+    favorite_star: r[26], favorite_singer: r[27], favorite_song: r[28],
+    favorite_food: r[29], dream_place: r[30], first_meeting: r[31],
+    personality_tags: JSON.parse(r[32]||'[]'),
   }));
 
   // Cover
