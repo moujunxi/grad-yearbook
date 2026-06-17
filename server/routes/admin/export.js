@@ -55,6 +55,7 @@ router.get('/excel', async (_req, res) => {
       { header: '爱吃的食物', key: 'favorite_food' }, { header: '想去的地方', key: 'dream_place' },
       { header: '梦想', key: 'future' }, { header: '第一次见面', key: 'first_meeting' },
       { header: '性格标签', key: 'personality_tags' },
+      { header: '签名', key: 'signature' },
       { header: '可见', key: 'is_visible' }, { header: '时间', key: 'created_at' },
     ];
     entries.forEach(e => ws.addRow(e));
