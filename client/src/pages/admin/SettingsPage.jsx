@@ -39,8 +39,18 @@ export default function SettingsPage() {
 
   const [pdfLoading, setPdfLoading] = useState(false);
 
-  const exportJson = () => { window.open('/api/admin/export/json', '_blank'); };
-  const exportExcel = () => { window.open('/api/admin/export/excel', '_blank'); };
+  const exportJson = async () => {
+    const r = await api.get('/admin/export/json', { responseType: 'blob' });
+    const url = URL.createObjectURL(new Blob([r.data], { type: 'application/json' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'entries.json'; a.click();
+    URL.revokeObjectURL(url);
+  };
+  const exportExcel = async () => {
+    const r = await api.get('/admin/export/excel', { responseType: 'blob' });
+    const url = URL.createObjectURL(new Blob([r.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'entries.xlsx'; a.click();
+    URL.revokeObjectURL(url);
+  };
   const exportPdf = async () => {
     setPdfLoading(true);
     try {
