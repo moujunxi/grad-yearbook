@@ -21,6 +21,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// Increase timeout for PDF generation (default 30s is too short)
+app.use((req, res, next) => {
+  req.setTimeout(180000); // 3 min
+  res.setTimeout(180000); // 3 min
+  next();
+});
+
 await getDb();
 
 app.use(cors());

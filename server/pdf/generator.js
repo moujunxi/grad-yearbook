@@ -18,16 +18,27 @@ const IMAGE_FILES = {
   'img-6': '1781607287404.png',
 };
 
+// Cache theme CSS to avoid reading files repeatedly
+const themeCache = new Map();
+
 function getThemeCSS(themeKey) {
+  if (themeCache.has(themeKey)) return themeCache.get(themeKey);
+  let css;
   if (IMAGE_FILES[themeKey]) {
     const imgPath = join(PUBLIC_DIR, IMAGE_FILES[themeKey]);
     if (existsSync(imgPath)) {
       const buf = readFileSync(imgPath);
       const b64 = buf.toString('base64');
-      return `background:url(data:image/png;base64,${b64}) center/cover no-repeat;background-color:#f8fafc`;
+      css = `background:url(data:image/png;base64,${b64}) center/cover no-repeat;background-color:#f8fafc`;
     }
   }
-  return `background:url(data:image/png;base64,${readFileSync(join(PUBLIC_DIR, IMAGE_FILES['img-1'])).toString('base64')}) center/cover no-repeat;background-color:#f8fafc`;
+  if (!css) {
+    const fallback = join(PUBLIC_DIR, IMAGE_FILES['img-1']);
+    const b64 = readFileSync(fallback).toString('base64');
+    css = `background:url(data:image/png;base64,${b64}) center/cover no-repeat;background-color:#f8fafc`;
+  }
+  themeCache.set(themeKey, css);
+  return css;
 }
 
 function avatarBase64(entry) {
@@ -88,6 +99,36 @@ function renderEntry(e, messages) {
   return html;
 }
 
+// Singleton browser instance — reuse across PDF generations
+let browserInstance = null;
+let browserLastUsed = 0;
+const BROWSER_MAX_IDLE = 5 * 60 * 1000; // close after 5 min idle
+
+async function getBrowser() {
+  // Close stale browser
+  if (browserInstance) {
+    const idle = Date.now() - browserLastUsed;
+    if (idle > BROWSER_MAX_IDLE) {
+      try { await browserInstance.close(); } catch {}
+      browserInstance = null;
+    }
+  }
+  if (!browserInstance) {
+    browserInstance = await puppeteer.launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--single-process',
+      ],
+    });
+  }
+  browserLastUsed = Date.now();
+  return browserInstance;
+}
+
 export async function generatePdf() {
   const db = await getDb();
   const rows = db.exec("SELECT * FROM entries WHERE is_visible = 1 ORDER BY created_at");
@@ -130,14 +171,16 @@ export async function generatePdf() {
   (allMsgs[0]?.values || []).forEach(([eid, c]) => { if (!msgMap[eid]) msgMap[eid] = []; msgMap[eid].push(c); });
   entries.forEach(e => { html += renderEntry(e, msgMap[e.id]); });
 
-  // Render PDF
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
-  const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: 'load', timeout: 60000 });
-  const pdf = await page.pdf({ format: 'A4', printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
-  await browser.close();
-  return pdf;
+  // Render PDF with reused browser
+  let page;
+  try {
+    const browser = await getBrowser();
+    page = await browser.newPage();
+    await page.setContent(html, { waitUntil: 'load', timeout: 120000 });
+    const pdf = await page.pdf({ format: 'A4', printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
+    return pdf;
+  } finally {
+    if (page) { try { await page.close(); } catch {} }
+    browserLastUsed = Date.now();
+  }
 }
