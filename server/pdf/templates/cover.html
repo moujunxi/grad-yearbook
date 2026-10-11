@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: "Noto Serif CJK SC","Source Han Serif SC","STSong","KaiTi","KaiTi_GB2312","SimSun","Songti SC","Microsoft YaHei",serif; }
+  .page { width:210mm; height:297mm; position:relative; overflow:hidden; page-break-after:always; }
+  /* 封面专属样式（cv- 前缀：三页共享一个文档，避免与内页样式互相覆盖） */
+  .page.cv {
+    background:#1B2C4A;
+    background-image:
+      radial-gradient(ellipse at 50% 38%, rgba(255,255,255,.055), transparent 62%),
+      repeating-linear-gradient(45deg, rgba(255,255,255,.018) 0 2px, transparent 2px 5px);
+  }
+  .cv-frame { position:absolute; inset:16px; border:2.5px solid #C29B34; pointer-events:none; }
+  .cv-frame::after { content:''; position:absolute; inset:5px; border:1px solid rgba(194,155,52,.5); }
+  .cv-corner { position:absolute; width:14px; height:14px; border:1.5px solid rgba(194,155,52,.8); z-index:3; }
+  .cv-corner.tl { top:30px; left:30px; border-right:none; border-bottom:none; }
+  .cv-corner.tr { top:30px; right:30px; border-left:none; border-bottom:none; }
+  .cv-corner.bl { bottom:30px; left:30px; border-right:none; border-top:none; }
+  .cv-corner.br { bottom:30px; right:30px; border-left:none; border-top:none; }
+
+  .cv-content {
+    position:relative; z-index:2; height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:#E9D9A6;
+  }
+  .cv-ornament { display:flex; align-items:center; gap:12px; margin-bottom:34px; }
+  .cv-ornament .rule { width:74px; height:1px; background:linear-gradient(to right, transparent, #C29B34); }
+  .cv-ornament .rule.r { background:linear-gradient(to left, transparent, #C29B34); }
+  .cv-ornament .dia { width:8px; height:8px; background:#C29B34; transform:rotate(45deg); }
+
+  .cv-eyebrow { font-size:15px; letter-spacing:12px; text-indent:12px; color:rgba(233,217,166,.85); margin-bottom:22px; }
+  .cv-title {
+    font-size:76px; font-weight:700; letter-spacing:22px; text-indent:22px;
+    color:#D8B45C; text-shadow:0 2px 0 rgba(0,0,0,.35), 0 0 24px rgba(216,180,92,.18);
+  }
+  .cv-title-latin { margin-top:20px; font-size:12px; letter-spacing:7px; text-indent:7px; color:rgba(233,217,166,.55); }
+  .cv-title-ornament { display:flex; align-items:center; gap:10px; margin-top:30px; }
+  .cv-title-ornament .rule { width:46px; height:1px; background:rgba(194,155,52,.65); }
+  .cv-title-ornament .dot { width:5px; height:5px; background:#C29B34; transform:rotate(45deg); }
+
+  .cv-bottom { position:absolute; left:0; right:0; bottom:64px; text-align:center; z-index:2; }
+  .cv-date { font-size:15px; letter-spacing:4px; color:rgba(233,217,166,.85); }
+  .cv-count { margin-top:10px; font-size:13px; letter-spacing:3px; color:rgba(233,217,166,.6); }
+</style></head><body>
+<div class="page cv">
+  <div class="cv-frame"></div>
+  <span class="cv-corner tl"></span><span class="cv-corner tr"></span>
+  <span class="cv-corner bl"></span><span class="cv-corner br"></span>
+  <div class="cv-content">
+    <div class="cv-ornament"><span class="rule"></span><span class="dia"></span><span class="rule r"></span></div>
+    <div class="cv-eyebrow">毕业纪念册</div>
+    <div class="cv-title">同学录</div>
+    <div class="cv-title-latin">GRADUATION YEARBOOK</div>
+    <div class="cv-title-ornament"><span class="rule"></span><span class="dot"></span><span class="rule"></span></div>
+  </div>
+  <div class="cv-bottom">
+    <div class="cv-date">{{DATE}}</div>
+    <div class="cv-count">{{COUNT}} 位同学 · 青春纪念</div>
+  </div>
+</div>
+</body></html>

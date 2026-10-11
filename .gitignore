@@ -1,0 +1,17 @@
+﻿node_modules/
+dist/
+*.db
+*.db-journal
+.env
+.env.local
+uploads/*
+!uploads/.gitkeep
+server/uploads/*
+!server/uploads/.gitkeep
+.DS_Store
+*.log
+# MiMo 会话内部目录 / 生成的 PDF 成品 / 可再生的预览与演示资源
+.mimocode/
+/*.pdf
+tests/_preview/
+tests/_demo/uploads/

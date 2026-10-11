@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { background:#fff; }
+  body { font-family: "Noto Serif CJK SC","Source Han Serif SC","STSong","KaiTi","KaiTi_GB2312","SimSun","Songti SC","Microsoft YaHei",serif; color:#2D2A24; }
+  .page { width:210mm; height:297mm; position:relative; overflow:hidden; page-break-after:always; }
+  /* 条目页专属（en 前缀：与封面/目录共用一个文档，避免样式互相覆盖） */
+  .page.en { background:#FAF6ED; }
+  /* 学生自选主题 → 极淡水印（保留个性化，整体仍是纸张书页） */
+  .watermark { position:absolute; inset:0; opacity:.10; background-color:transparent !important; background-size:cover; background-position:center; }
+  /* 书脊装订阴影 */
+  .spine { position:absolute; left:0; top:0; bottom:0; width:26px; background:linear-gradient(to right, rgba(70,52,24,.16), rgba(70,52,24,0)); }
+  /* 双线页框（书页版心） */
+  .frame { position:absolute; inset:12px; border:1.5px solid rgba(45,42,36,.5); pointer-events:none; }
+  .frame::after { content:''; position:absolute; inset:3px; border:.5px solid rgba(45,42,36,.28); }
+
+  .content { position:relative; z-index:2; height:100%; display:flex; flex-direction:column; align-items:center; padding:26px 36px 40px; zoom:0.97; }
+
+  .avatar {
+    width:84px; height:84px; border-radius:4px; object-fit:cover;
+    border:3px solid #fff; outline:1px solid rgba(45,42,36,.45);
+    box-shadow:0 3px 10px rgba(0,0,0,.16); background:#fff;
+  }
+  .avatar-placeholder {
+    width:84px; height:84px; border-radius:4px; background:#EFE7D6;
+    border:3px solid #fff; outline:1px solid rgba(45,42,36,.45);
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    display:flex; align-items:center; justify-content:center; font-size:28px;
+  }
+
+  .name { margin-top:10px; font-size:28px; font-weight:700; letter-spacing:7px; text-indent:7px; color:#1E1B16; }
+  /* 个性标签 → 朱红印章 */
+  .label {
+    display:inline-block; margin-top:8px; padding:3.5px 13px;
+    background:#B03A2E; color:#FFF6E5; font-size:11.5px; letter-spacing:4px; text-indent:4px;
+    border-radius:2px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.38);
+  }
+  .motto { margin-top:8px; font-family:"KaiTi","KaiTi_GB2312","STKaiti","KaiTi SC","Noto Serif CJK SC",serif; font-size:15px; color:#7A6A4F; letter-spacing:2px; }
+
+  .divider { display:flex; align-items:center; gap:9px; margin:11px 0 9px; }
+  .divider .rule { width:64px; height:1px; background:rgba(45,42,36,.4); }
+  .divider .dia { width:6px; height:6px; background:#C29B34; transform:rotate(45deg); }
+
+  /* 信息条：流式紧凑排布（书页信息带，而非表单） */
+  .info {
+    display:flex; flex-wrap:wrap; justify-content:center; align-items:baseline;
+    width:100%; max-width:430px;
+    background:rgba(255,255,255,.55); border:1px solid rgba(45,42,36,.25);
+    border-radius:2px; padding:9px 12px; row-gap:7px;
+  }
+  .info-item { display:flex; align-items:baseline; gap:6px; padding:0 12px; border-right:1px dotted rgba(45,42,36,.35); }
+  .info-item:last-child { border-right:none; }
+  .info dt { font-size:9.5px; color:#A08F73; letter-spacing:2px; white-space:nowrap; }
+  .info dd { font-size:12.5px; color:#2D2A24; font-weight:500; white-space:nowrap; }
+
+  .pref-box {
+    width:100%; max-width:430px; margin-top:9px;
+    background:rgba(255,255,255,.55); border:1px solid rgba(45,42,36,.25);
+    border-radius:2px; padding:8px 14px;
+  }
+  .pref-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; }
+  .pref-item { display:flex; gap:7px; font-size:12px; line-height:1.55; }
+  .pref-label { color:#A08F73; flex-shrink:0; }
+  .pref-value { color:#2D2A24; font-weight:500; }
+
+  .future-box { width:100%; max-width:430px; margin-top:9px; }
+  .future-label {
+    display:inline-block; font-size:10px; font-weight:700; letter-spacing:3.5px;
+    color:#B03A2E; border-bottom:1.5px solid #C29B34; padding-bottom:1.5px; margin-bottom:4px;
+  }
+  .future-box p { font-size:12.5px; line-height:1.65; color:#3A342B; }
+
+  .tags { margin-top:8px; display:flex; flex-wrap:wrap; gap:4px; justify-content:center; }
+  .tag {
+    padding:2px 10px; border:1px solid rgba(45,42,36,.4); border-radius:99px;
+    background:rgba(255,255,255,.45); color:#4A4335; font-size:10.5px; letter-spacing:1.5px;
+  }
+
+  .bio-box {
+    width:100%; max-width:430px; margin-top:9px;
+    background:rgba(255,255,255,.55); border:1px solid rgba(45,42,36,.25);
+    border-radius:2px; padding:9px 14px 10px;
+  }
+  .bio-box h3 {
+    position:relative; text-align:center; font-size:11px; font-weight:700;
+    letter-spacing:5px; text-indent:5px; color:#8A7B62; margin-bottom:6px;
+  }
+  .bio-box h3::before, .bio-box h3::after {
+    content:''; position:absolute; top:50%; width:64px; height:1px; background:rgba(45,42,36,.3);
+  }
+  .bio-box h3::before { left:0; }
+  .bio-box h3::after { right:0; }
+  .bio-box p { font-size:12px; line-height:1.7; color:#3A342B; }
+
+  .qa-box {
+    width:100%; max-width:430px; margin-top:9px;
+    background:rgba(255,255,255,.55); border:1px solid rgba(45,42,36,.25);
+    border-radius:2px; padding:2px 14px;
+  }
+  .qa-item { padding:6px 0; border-bottom:1px dotted rgba(45,42,36,.3); }
+  .qa-item:last-child { border-bottom:none; }
+  .qa-item .q { font-size:10.5px; color:#A08F73; letter-spacing:1.5px; margin-bottom:1.5px; }
+  .qa-item .a { font-size:12.5px; color:#2D2A24; line-height:1.5; }
+
+  .signature-box {
+    width:100%; max-width:430px; margin-top:9px; text-align:center;
+    background:rgba(255,255,255,.5); border:1px dashed rgba(45,42,36,.4);
+    border-radius:2px; padding:6px 12px 8px;
+  }
+  .sig-label { font-size:10px; letter-spacing:3.5px; text-indent:3.5px; color:#A08F73; margin-bottom:5px; }
+  .sig-img { max-width:170px; max-height:50px; }
+
+  .messages-box { width:100%; max-width:430px; margin-top:9px; padding-top:8px; border-top:1px dashed rgba(45,42,36,.4); }
+  .msg-title {
+    text-align:center; font-size:11px; font-weight:700;
+    letter-spacing:5px; text-indent:5px; color:#8A7B62; margin-bottom:6px;
+  }
+  .msg-item {
+    background:rgba(255,255,255,.65); border:1px solid rgba(45,42,36,.2);
+    border-left:3px solid #B03A2E; border-radius:2px;
+    padding:6px 10px; margin-bottom:5px;
+  }
+  .msg-item:last-child { margin-bottom:0; }
+  .msg-body { font-size:12px; line-height:1.6; color:#4A4335; }
+
+  .footer { position:absolute; left:0; right:0; bottom:16px; text-align:center; z-index:2; font-size:11px; letter-spacing:2px; color:rgba(45,42,36,.55); }
+</style></head><body>
+<div class="page en {{THEME_CLASS}}">
+  <div class="watermark" style="{{THEME_BG}}"></div>
+  <div class="spine"></div>
+  <div class="frame"></div>
+  <div class="content">
+    {{AVATAR}}
+    <h1 class="name">{{NAME}}</h1>
+    {{LABEL_HTML}}
+    {{MOTTO_HTML}}
+    <div class="divider"><span class="rule"></span><span class="dia"></span><span class="rule"></span></div>
+    <dl class="info">
+      {{INFO_ROWS}}
+    </dl>
+    {{PREF_HTML}}
+    {{FUTURE_HTML}}
+    {{MEETING_HTML}}
+    {{PERSONALITY_HTML}}
+    {{BIO_HTML}}
+    {{TAGS_HTML}}
+    {{QA_HTML}}
+    {{SIGNATURE_HTML}}
+    {{MESSAGES_HTML}}
+  </div>
+  {{FOOTER_HTML}}
+</div>
+</body></html>

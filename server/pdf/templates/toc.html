@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: "Noto Serif CJK SC","Source Han Serif SC","STSong","KaiTi","KaiTi_GB2312","SimSun","Songti SC","Microsoft YaHei",serif; color:#2D2A24; }
+  .page { width:210mm; height:297mm; position:relative; overflow:hidden; page-break-after:always; }
+  .spine { position:absolute; left:0; top:0; bottom:0; width:26px; background:linear-gradient(to right, rgba(70,52,24,.16), rgba(70,52,24,0)); }
+  .frame { position:absolute; inset:12px; border:1.5px solid rgba(45,42,36,.5); pointer-events:none; }
+  .frame::after { content:''; position:absolute; inset:3px; border:.5px solid rgba(45,42,36,.28); }
+  .footer { position:absolute; left:0; right:0; bottom:16px; text-align:center; z-index:2; font-size:11px; letter-spacing:2px; color:rgba(45,42,36,.55); }
+
+  /* 目录页专属样式（tc- 前缀） */
+  .page.tc { background:#FAF6ED; }
+  .tc-content { position:relative; z-index:2; height:100%; display:flex; flex-direction:column; align-items:center; padding:78px 40px 50px; }
+  .tc-kicker { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .tc-kicker .rule { width:44px; height:1px; background:rgba(45,42,36,.4); }
+  .tc-kicker .dia { width:6px; height:6px; background:#C29B34; transform:rotate(45deg); }
+  .tc-title { font-size:30px; font-weight:700; letter-spacing:16px; text-indent:16px; color:#1E1B16; }
+  .tc-subtitle { margin-top:10px; font-size:11px; letter-spacing:5px; text-indent:5px; color:#A08F73; }
+  .tc-head-rule { margin-top:22px; width:120px; height:1.5px; background:linear-gradient(to right, transparent, rgba(45,42,36,.55), transparent); }
+
+  .tc-table { width:100%; max-width:430px; margin-top:34px; border-collapse:collapse; }
+  .tc-table tr { border-bottom:1px solid rgba(45,42,36,.12); }
+  .tc-table tr:last-child { border-bottom:none; }
+  .tc-table td { padding:11px 4px; vertical-align:middle; }
+  .tc-table td.toc-name { font-size:14.5px; color:#2D2A24; letter-spacing:2px; white-space:nowrap; }
+  .tc-table td.toc-dots { position:relative; width:100%; }
+  .tc-table td.toc-dots::after {
+    content:''; position:absolute; left:10px; right:12px; bottom:15px;
+    border-bottom:1px dotted rgba(45,42,36,.45);
+  }
+  .tc-table td.toc-page {
+    width:56px; text-align:right; font-size:13.5px; color:#7A6A4F;
+    font-variant-numeric:tabular-nums; letter-spacing:1px;
+  }
+</style></head><body>
+<div class="page tc">
+  <div class="spine"></div>
+  <div class="frame"></div>
+  <div class="tc-content">
+    <div class="tc-kicker"><span class="rule"></span><span class="dia"></span><span class="rule"></span></div>
+    <div class="tc-title">目 录</div>
+    <div class="tc-subtitle">CONTENTS</div>
+    <div class="tc-head-rule"></div>
+    <table class="tc-table">{{ROWS}}</table>
+  </div>
+  <div class="footer">— {{PAGE_NO}} —</div>
+</div>
+</body></html>
